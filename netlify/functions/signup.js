@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const { MongoClient } = require('mongodb');
 
 // Modèles
-const User = require('../models/User'); // Si tu utilises Mongoose pour l'ORM
+const User = require('../../models/User'); // Si tu utilises Mongoose pour l'ORM
 
 // Se connecter à MongoDB
 const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority';
