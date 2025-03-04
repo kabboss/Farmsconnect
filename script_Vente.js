@@ -195,7 +195,7 @@ function sendData(animal) {
     // Assure-toi que `location` est bien inclus
     console.log("Objet envoyé au serveur :", JSON.stringify(animal));
 
-        fetch('https://farmsconnect.netlify.app/api/annonces', {
+        fetch('https://farmsconnect.netlify.app/.netlify/functions/annonces', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(animal)

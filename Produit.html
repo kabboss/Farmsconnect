@@ -1260,7 +1260,7 @@ function demanderLocalisation() {
         loadingMessage.classList.remove("hidden1");
 
         // Envoyer la requête POST à l'API
-        fetch('https://farmsconnect.netlify.app/api/order', {
+        fetch('https://farmsconnect.netlify.app/.netlify/functions/order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

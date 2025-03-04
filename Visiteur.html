@@ -268,7 +268,7 @@ categoryButtons.forEach(button => {
         }
 
         // Récupération des annonces depuis l'API
-        fetch("https://farmsconnect.netlify.app/api/annonces")
+        fetch("https://farmsconnect.netlify.app/.netlify/functions/annonces")
             .then((response) => response.json())
             .then((annonces) => {
                 allAnnonces = annonces; // Stockage des annonces pour filtrage futur
@@ -683,7 +683,7 @@ L’équipe FarmsConnect
 
 // Fonction générique pour envoyer un email
 function sendEmail(subject, content, email) {
-    fetch('https://farmsconnect.netlify.app/api/send-email', {
+    fetch('https://farmsconnect.netlify.app/.netlify/functions/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ subject, content, email })
@@ -701,7 +701,7 @@ function sendEmail(subject, content, email) {
 
 // Planification de l'email pour le client
 function scheduleClientEmail(purchaseDetails) {
-    fetch('https://farmsconnect.netlify.app/api/schedule-email', {
+    fetch('https://farmsconnect.netlify.app/.netlify/functions/schedule-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ purchaseDetails, delay: 24 })

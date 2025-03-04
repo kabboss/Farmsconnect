@@ -217,7 +217,7 @@ window.addEventListener('click', (event) => {
 
                 try {
                     // Vérification des annonces existantes
-                    const response = await fetch(`https://farmsconnect.netlify.app/api/annonces/count?vendeur=${emailVendeur}&contact=${contactPrincipal}`);
+                    const response = await fetch(`https://farmsconnect.netlify.app/.netlify/functions/annonces/count?vendeur=${emailVendeur}&contact=${contactPrincipal}`);
                     const data = await response.json();
 
                     if (data.annoncesCount >= 3) {
