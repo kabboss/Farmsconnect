@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Annonce = require('./models/Annonce'); // Assure-toi que le modèle est bien défini
+const Annonce = require('../models/Annonce'); // Assure-toi que le modèle est bien défini
 require('dotenv').config();
 
 // Connexion à MongoDB (avec l'URI en dur)
