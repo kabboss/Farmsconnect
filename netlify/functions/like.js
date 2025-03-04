@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Message = require('./models/Message'); // Assure-toi que ton modèle 'Message' est bien défini
+const Message = require('../../models/Message'); // Assure-toi que ton modèle 'Message' est bien défini
 
 // Connexion à MongoDB dans la fonction (important car les fonctions Lambda sont stateless)
 const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority';

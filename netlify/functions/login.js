@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("./models/User");  // Adapte le chemin de ton modèle User
+const User = require("../../models/User");  // Adapte le chemin de ton modèle User
 
 // Connecte-toi à MongoDB ici si ce n'est pas déjà fait
 
