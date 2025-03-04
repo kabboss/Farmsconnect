@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animaux à Vendre - FarmsConnect</title>
+    <link rel="icon" type="image/png" href="img/FarmsConnect.jpg"> <!-- Chemin vers votre image -->
+    <link rel="stylesheet" href="style_Visiter.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="cordova.js"></script>
+
+</head>
+<body>    
+
+
+<!-- Message de chargement -->
+<div id="loadingMessage" class="hidden">
+    <div class="spinner-container">
+        <img src="img/FarmsConnect.jpg" alt="Chargement" class="spinner-image" />
+        <div class="spinner"></div>
+    </div>
+    <p class="loading-text">Veuillez patientez </p> 
+</div>
+
+
+
+
+
+
+<script>
+window.onload = function() {
+    // Afficher le message de chargement dès que la page est chargée
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.classList.remove('hidden');  // Afficher le message de chargement
+
+    // Masquer le message de chargement après 5 secondes (5000 ms)
+    setTimeout(function() {
+        loadingMessage.classList.add('hidden');  // Cacher le message de chargement
+    }, 7000);  // Temps en millisecondes
+};
+</script>
+
+
+    <header class="header">
+     <div class="logo-container">
+            <h2 class="logo">Animaux Disponibles</h2>
+            <h4>Mis en ligne par des vendeurs</h4>
+        </div>
+        <nav class="nav">
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="nav-list">
+                <li><a href="Acceuil.html">Accueil</a></li>
+                <li><a href="Vente.html">Vendre</a></li>
+                <li><a href="Visiteur.html">Visiter</a></li>
+                <li><a href="Produit.html">Acheter Avec FarmsConnect</a></li>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="Formations.html">Vidéos Formation</a></li>
+            </ul>
+        </nav>
+        <div class="image-container">
+            <img src="img/FarmsConnect.jpg" alt="Farms Connect" class="header-image">
+        </div>
+    </header>
+
+
+    <button class="open-modal-button">Note Importante pour les Visiteurs</button>
+
+    <!-- Fenêtre modale pour les visiteurs -->
+    <div id="modal-visitor" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Note Importante pour les Visiteurs</h2>
+            <p><strong>Chers visiteurs,</strong></p>
+            <p>
+                Nous vous remercions pour l'intérêt que vous portez à nos produits sur <strong>FarmsConnect</strong> 🌱. Avant de finaliser votre commande, voici quelques informations essentielles à connaître :
+            </p>
+            <ol>
+                <li>
+                    <strong>🔍 Vérification de la qualité des produits</strong><br>
+                    Chaque produit proposé sur notre plateforme subit un contrôle vétérinaire de qualité supérieure avant la mise en vente 🐄💉. Nous garantissons que tous nos animaux sont en parfaite santé et respectent des normes de sécurité strictes 🛡️.
+                </li>
+                <li>
+                    <strong>🛒 Processus de commande simplifié</strong><br>
+                    Une fois que vous avez trouvé l'animal ou le produit qui vous intéresse, vous pouvez passer votre commande en toute sécurité 🔒. Nous nous occupons de toute la logistique et assurons la livraison jusqu'à chez vous 🚚💨.
+                </li>
+                <li>
+                    <strong>🏡 Livraison rapide à domicile</strong><br>
+                    Après validation du contrôle vétérinaire, votre commande sera expédiée directement à votre adresse 📦. Vous recevrez une notification instantanée lorsque votre produit est en route 📲📍.
+                </li>
+            </ol>
+            <p>
+                <strong>Nous nous engageons à vous offrir un service de qualité et à garantir la sécurité des produits que vous achetez. 💯</strong>
+            </p>
+            <p class="support-message">Pour toute question ou assistance, notre équipe de support est prête à vous aider 🤗. N'hésitez pas à nous contacter ! <a href="https://wa.me/+22656663638" target="_blank">Cliquez ici pour contacter sur WhatsApp</a></p>            <p class="signature">Cordialement,<br><em>L’équipe FarmsConnect 🚜</em></p>
+        </div>
+    </div>
+
+    <button id="refreshButton">Rafraîchir la page</button>
+
+    <script>
+        // Attacher un événement de clic au bouton
+        document.getElementById('refreshButton').addEventListener('click', function() {
+            // Rafraîchir la page lorsque le bouton est cliqué
+            location.reload();
+        });
+    </script>
+
+
+<section class="categories">
+    <div class="category-list">
+        <button class="category-button" data-category="poulet-local">Poulet local</button>
+        <button class="category-button" data-category="poulet-chair">Poulet de chair</button>
+        <button class="category-button" data-category="poulet-ameliorer">Poulet Amélioré</button>
+        <button class="category-button" data-category="poule-pondeuse">Poule Pondeuse</button>    </div>
+</section>
+
+
+<!-- Section pour les boutons de prix -->
+<div id="price-buttons" class="hidden">
+    <button class="price-button" data-price="0-500">0-500 FCFA</button>
+    <button class="price-button" data-price="501-1000">501-1000 FCFA</button>
+    <button class="price-button" data-price="1001-2000">1001-2000 FCFA</button>
+    <button class="price-button" data-price="2001-5000">2001-5000 FCFA</button>
+    <button class="price-button" data-price="5000+">5000 FCFA & +</button>
+</div>
+
+<!-- Section où les annonces filtrées seront affichées -->
+<section class="animals-list" id="animals-list"></section>
+<div id="pagination" class="pagination-container"></div>
+
+
+
+
+<script>
+    // Sélectionner tous les boutons de catégorie
+const categoryButtons = document.querySelectorAll('.category-button');
+
+// Sélectionner la section des boutons de prix
+const priceButtons = document.getElementById('price-buttons');
+
+// Ajouter un événement de clic sur chaque bouton de catégorie
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Afficher les boutons de prix lorsque l'un des boutons de catégorie est cliqué
+        priceButtons.style.display = 'flex';
+    });
+});
+
+</script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const animalsList = document.getElementById("animals-list");
+        const categoriesButtons = document.querySelectorAll(".category-button");
+        const priceButtonsSection = document.getElementById("price-buttons");
+
+        const itemsPerPage = 6;
+        let selectedCategory = "";
+        let selectedPriceRange = "";
+        let filteredAnnonces = [];
+        let allAnnonces = []; // Stockage des annonces récupérées depuis l'API
+        let currentPage = 1;
+
+        // Fonction d'affichage des annonces
+        function displayAnnonces(annonces) {
+            annonces.forEach((animal) => {
+                const animalCard = document.createElement("div");
+                animalCard.classList.add("animal-card", "animate__animated", "animate__fadeInUp");
+
+                const mainImage = animal.images[0] || "";
+                const additionalImages = animal.images.slice(1).map((img) => `<img src="${img}" alt="Image supplémentaire" class="additional-image">`).join("");
+
+                animalCard.innerHTML = `
+                    <div class="animal-card-header">
+                        <h3 class="category-name">📂 (${animal.categorie})</h3>
+                        <p>🔖 Numéro d'annonce  : ${animal.codeVendeur}</p>
+                    </div>
+                    <div class="animal-card-body">
+                        <p>📦 Nombre : ${animal.nombre}</p>
+                        <p>⚖️ Poids : ${animal.poids || "Non spécifié"} kg</p>
+                        <p><strong>💵 Prix : ${animal.prixFinal} FCFA</strong></p>
+                        <div class="images-section">
+                        <img src="${mainImage}" alt="Image de l'animal" class="animal-image" loading="lazy">
+                            <div class="additional-images hidden">${additionalImages}</div>
+                            ${animal.images.length > 1 ? `<button class="see-more-button">👁️ Voir plus</button>` : ""}
+                        </div>
+                    </div>
+                    <div class="animal-card-footer">
+                        <button class="buy-button" data-animal='${JSON.stringify(animal)}'>🛒 Acheter</button>
+                    </div>
+                `;
+
+                animalsList.appendChild(animalCard);
+            });
+
+            addEventListenersToButtons();
+        }
+
+        // Fonction d'affichage de la pagination
+        function displayPagination(totalItems, currentPage) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            if (currentPage < totalPages) {
+                loadMoreAnnonces();
+            }
+        }
+
+        // Fonction pour charger plus d'annonces
+        function loadMoreAnnonces() {
+            if (filteredAnnonces.length > 0) {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const paginatedAnnonces = filteredAnnonces.slice(startIndex, startIndex + itemsPerPage);
+                displayAnnonces(paginatedAnnonces);
+                currentPage++;
+            }
+        }
+
+        // Fonction de filtrage des annonces
+        function filterAnnonces() {
+            let filtered = allAnnonces;
+
+            if (selectedCategory) {
+                filtered = filtered.filter((animal) => animal.categorie === selectedCategory);
+            }
+
+            if (selectedPriceRange) {
+                filtered = filtered.filter((animal) => {
+                    const price = animal.prixFinal;
+                    if (selectedPriceRange === "0-500") return price <= 500;
+                    if (selectedPriceRange === "501-1000") return price > 500 && price <= 1000;
+                    if (selectedPriceRange === "1001-2000") return price > 1000 && price <= 2000;
+                    if (selectedPriceRange === "2001-5000") return price > 2000 && price <= 5000;
+                    if (selectedPriceRange === "5000+") return price > 5000;
+                    return false;
+                });
+            }
+
+            filteredAnnonces = filtered;
+            currentPage = 1; // Réinitialiser la page actuelle
+            animalsList.innerHTML = ""; // Effacer les annonces existantes
+            loadMoreAnnonces(); // Charger les premières annonces
+        }
+
+        // Fonction d'ajout des écouteurs d'événements sur les boutons
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".see-more-button").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const additionalImages = button.previousElementSibling;
+                    additionalImages.classList.toggle("hidden");
+                    button.textContent = additionalImages.classList.contains("hidden") ? "👁️ Voir plus" : "👁️ Voir moins";
+                });
+            });
+
+            document.querySelectorAll(".buy-button").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const animal = JSON.parse(button.getAttribute("data-animal"));
+                    handlePurchase(animal);
+               });
+            });
+        }
+
+        // Récupération des annonces depuis l'API
+        fetch("https://farmsconnect.netlify.app/api/annonces")
+            .then((response) => response.json())
+            .then((annonces) => {
+                allAnnonces = annonces; // Stockage des annonces pour filtrage futur
+
+                categoriesButtons.forEach((button) => {
+                    button.addEventListener("click", () => {
+                        selectedCategory = button.getAttribute("data-category");
+                        priceButtonsSection.classList.remove("hidden");
+                        filterAnnonces();
+                    });
+                });
+
+                priceButtonsSection.querySelectorAll(".price-button").forEach((button) => {
+                    button.addEventListener("click", () => {
+                        selectedPriceRange = button.getAttribute("data-price");
+                        filterAnnonces();
+                    });
+                });
+
+                // Ajouter l'écouteur d'événements pour la pagination infinie
+                window.addEventListener("scroll", () => {
+                    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500) {
+                        loadMoreAnnonces();
+                    }
+                });
+            })
+            .catch((error) => console.error("Erreur lors de la récupération des annonces :", error));
+    });
+</script>
+        
+<script>
+
+// Variable globale pour stocker la localisation
+let userLocation = null;
+
+// Vérification si Cordova est disponible
+if (typeof cordova !== "undefined") {
+    document.addEventListener("deviceready", function () {
+        checkGPSStatusAndRequestPermission();
+    });
+} else {
+    // Fallback si Cordova n'est pas disponible
+    checkGPSStatusAndRequestPermission();
+}
+
+// Fonction pour vérifier si le GPS est activé et demander la permission
+function checkGPSStatusAndRequestPermission() {
+    if (typeof cordova !== "undefined" && cordova.plugins.diagnostic) {
+        const diagnostic = cordova.plugins.diagnostic;
+
+        // Vérifie si le GPS est activé
+        diagnostic.isLocationEnabled(function (enabled) {
+            if (!enabled) {
+                // Si le GPS n'est pas activé, on tente de l'activer automatiquement
+                diagnostic.switchToLocationSettings(function () {
+                    console.log("L'utilisateur a été redirigé vers les paramètres pour activer le GPS.");
+                }, function (error) {
+                    console.error("Erreur lors de la redirection vers les paramètres : ", error);
+                });
+            }
+            // Demander la permission de localisation
+            requestLocationPermission();
+        }, function (error) {
+            console.error("Erreur lors de la vérification de l'état du GPS : ", error);
+        });
+    } else {
+        // Si Cordova n'est pas disponible, utiliser l'API de géolocalisation standard
+        requestLocationPermission();
+    }
+}
+
+// Fonction pour demander les permissions de localisation via Cordova
+function requestLocationPermission() {
+    if (typeof cordova !== "undefined" && cordova.plugins.permissions) {
+        const permissions = cordova.plugins.permissions;
+
+        // Vérifie si la permission est déjà accordée
+        permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, (status) => {
+            if (!status.hasPermission) {
+                // Si la permission n'est pas accordée, on la demande
+                permissions.requestPermission(
+                    permissions.ACCESS_FINE_LOCATION,
+                    () => {
+                        console.log("Permission de localisation accordée !");
+                        getLocation(); // Récupère la localisation après avoir obtenu la permission
+                    },
+                    () => {
+                        console.error("Permission de localisation refusée.");
+                        alert("L'application a besoin de la localisation pour fonctionner correctement.");
+                    }
+                );
+            } else {
+                console.log("Permission de localisation déjà accordée.");
+                getLocation(); // Si la permission est déjà accordée, on récupère la localisation
+            }
+        }, (error) => {
+            console.error("Erreur lors de la vérification des permissions :", error);
+        });
+    } else {
+        // Si Cordova n'est pas disponible, utilise l'API de géolocalisation standard
+        getLocation();
+    }
+}
+
+// Fonction pour récupérer la localisation de l'utilisateur
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                // Localisation réussie
+                userLocation = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                };
+                console.log("Localisation obtenue :", userLocation);
+            },
+            (error) => {
+                handleGeolocationError(error);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0,
+            }
+        );
+    } else {
+        alert("La géolocalisation n'est pas supportée par votre appareil.");
+    }
+}
+
+// Gestion des erreurs de géolocalisation
+function handleGeolocationError(error) {
+    let message = "";
+
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            message = "L'accès à la localisation a été refusé.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = "La localisation est indisponible.";
+            break;
+        case error.TIMEOUT:
+            message = "Le temps pour obtenir la localisation a expiré. Assurez-vous que votre GPS est activé.";
+            break;
+        default:
+            message = "Une erreur inconnue est survenue.";
+            break;
+    }
+
+    alert(`Erreur de localisation : ${message}`);
+}
+
+
+let isInfoCollected = false; // Flag pour vérifier si les informations ont déjà été collectées
+
+// Fonction pour gérer l'achat d'un produit/animal
+function handlePurchase(animal) {
+    // Si les informations ont déjà été collectées, on n'affiche pas les prompt
+    if (isInfoCollected) {
+        processEmails(animal);
+        return;
+    }
+
+    const visitorInfo = {
+        username: validateUsername(),
+        contact: validateContact(),
+        email: validateEmail(),
+        quantity: validateQuantity(),
+        quartier: validateQuartier(),
+    };
+
+    // Arrête l'exécution si une donnée est manquante
+    if (Object.values(visitorInfo).includes(null)) {
+        alert("L'achat a été annulé ou des informations sont manquantes.");
+        return;
+    }
+
+    // Si toutes les informations sont valides, on met à jour le flag
+    isInfoCollected = true;
+
+    // Vérifie si la localisation est disponible avant de continuer
+    if (!userLocation) {
+        alert("La localisation de l'utilisateur n'est pas encore disponible.");
+        return;
+    }
+
+    // Création des détails d'achat avec la localisation globale
+    const purchaseDetails = {
+        animalId: animal._id,
+        animalName: animal.categorie,
+        email: visitorInfo.email,
+        username: visitorInfo.username,
+        contact: visitorInfo.contact,
+        quantity: visitorInfo.quantity,
+        quartier: visitorInfo.quartier,
+        location: userLocation, // Utilise la localisation globale ici
+    };
+
+console.log("Détails de l'achat :", purchaseDetails);
+console.log(visitorInfo);  // Vérifier si `quantity` est défini ici
+processEmails(animal, visitorInfo, purchaseDetails);
+
+}
+
+// Validation pour le champ "Nom et Prénom"
+function validateUsername() {
+        let username;
+        do {
+            username = prompt("Veuillez entrer votre nom et prénom.");
+
+            if (username === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
+
+            if (!username || username.trim().length < 3) {
+                alert("Veuillez entrer un Nom et Prénom valides (au moins 3 caractères).");
+            }
+        } while (!username || username.trim().length < 3);
+        return username.trim();
+    }
+
+    // Validation pour le champ "Numéro de téléphone"
+// Validation pour le champ "Numéro de téléphone"
+function validateContact() {
+    const phoneRegex = /^\d{8}$/; // Format : numéro de 8 chiffres
+
+    while (true) {
+        // Demander à l'utilisateur d'entrer son numéro de téléphone
+        const contact = prompt("Entrez votre numéro de téléphone :");
+
+        // Vérifier si l'utilisateur a annulé l'action
+        if (contact === null) {
+            alert("Action annulée par l'utilisateur.");
+            return null; // Retourne null si l'utilisateur annule
+        }
+
+        // Vérifier si le numéro est valide
+        if (phoneRegex.test(contact)) {
+            return contact; // Retourne le numéro valide
+        }
+
+        // Message d'erreur si le numéro est invalide
+        alert("Veuillez entrer un numéro de téléphone valide (8 chiffres).");
+    }
+}
+
+    // Validation pour l'email avec confirmation
+    function validateEmail() {
+        let email, confirmEmail;
+        do {
+            email = prompt("Votre adresse e-mail :");
+
+            if (email === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
+
+            confirmEmail = prompt("Confirmez votre adresse e-mail :");
+
+            if (confirmEmail === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
+
+            if (email !== confirmEmail || !isValidEmail(email)) {
+                alert("Les emails ne correspondent pas ou sont invalides. Veuillez réessayer.");
+            }
+        } while (email !== confirmEmail || !isValidEmail(email));
+        return email;
+    }
+
+    // Vérification du format de l'email
+    function isValidEmail(email) {
+        const emailRegex = /^\S+@\S+\.\S+$/;
+        return emailRegex.test(email);
+    }
+
+function validateQuantity() {
+    let quantity;
+    do {
+        quantity = prompt("Combien d'unités de ce produit souhaitez-vous acheter ?");
+
+        if (quantity === null) {
+            alert("Action annulée par l'utilisateur.");
+            return null;
+        }
+
+        if (isNaN(quantity) || quantity <= 0) {
+            alert("Veuillez entrer une quantité valide (nombre supérieur à 0).");
+        }
+    } while (isNaN(quantity) || quantity <= 0);
+    return parseInt(quantity);  // Assurez-vous que vous renvoyez un nombre
+}
+
+    // Validation pour le quartier
+    function validateQuartier() {
+        let quartier;
+        do {
+            quartier = prompt("Quel est votre Quartier ?");
+
+            if (quartier === null) {
+                alert("Action annulée par l'utilisateur.");
+                return null;
+            }
+
+            if (!quartier || quartier.trim().length < 2) {
+                alert("Veuillez entrer un Quartier valide (au moins 2 caractères).");
+            }
+        } while (!quartier || quartier.trim().length < 2);
+        return quartier.trim();
+    }
+
+    
+
+async function processEmails(animal, visitorInfo, purchaseDetails) {
+    try {
+        console.log("Calcul du total et affichage de l'alerte");
+        const totalPrice = (animal.prix * visitorInfo.quantity * 1.04 + 500).toLocaleString();
+        alert(`Merci ${visitorInfo.username} ! Le total à payer est : ${totalPrice} FCFA (inclut 500 FCFA de frais de traitement)`);
+
+        // Email pour le vendeur
+        const emailSubjectVendeur = "📢 Intérêt pour votre annonce sur FarmsConnect !";
+        const emailContentVendeur = `
+Bonjour ${animal.usernameVendeur}
+
+Nous avons le plaisir de vous informer qu'un client est intéressé par votre annonce. Voici les détails de la commande :
+
+🔹 Catégorie : ${animal.categorie}  
+🔹 Quantité demandée : ${visitorInfo.quantity}  
+🔹 Nom du client : ${visitorInfo.username}  
+🔖 Numéro de l'annonce : ${animal.codeVendeur}  
+💰 Recette estimée : ${(animal.prix * visitorInfo.quantity).toLocaleString()} FCFA  
+
+📦 FarmsConnect vous contactera bientôt pour organiser la livraison.  
+
+Merci d'utiliser FarmsConnect, votre partenaire de confiance !
+
+Cordialement,  
+L’équipe FarmsConnect 
+
+        `;
+        console.log("Envoi de l'email au vendeur");
+        console.log("Email du vendeur :", animal.emailVendeur);
+        await sendEmail(emailSubjectVendeur, emailContentVendeur, animal.emailVendeur);
+
+        // Email pour le client 
+        const emailSubjectClient = "🟢Votre achat a été confirmé avec succès."
+        const emailContentClient = `
+Bonjour ${visitorInfo.username},
+
+Merci pour votre commande ! Voici les détails de votre achat :  
+
+🔹 Catégorie : ${animal.categorie}  
+🔹 Quantité demandée : ${visitorInfo.quantity}  
+💰 Total à payer : ${totalPrice} FCFA _(inclut 500 FCFA de frais de traitement)_  
+🚚 Livraison : Gratuite  
+🔖 Numéro de l'annonce : ${animal.codeVendeur}  
+
+Nous vous contacterons prochainement pour organiser la livraison.  
+
+Merci de faire confiance à FarmsConnect ! 
+Vous avez des questions ? Contactez-nous 👉 [Cliquez ici pour WhatsApp](https://wa.me/+22656663638)
+
+Cordialement,  
+L’équipe FarmsConnect 
+        `;
+        console.log("Envoi de l'email au client");
+        await sendEmail(emailSubjectClient, emailContentClient, visitorInfo.email);
+
+        // Email pour FarmsConnect
+        const emailSubjectFarmsConnect = "🔴Nouvelle commande enregistrée sur FarmsConnect";
+        const emailContentFarmsConnect = `
+Bonjour FarmsConnect,
+
+Une nouvelle commande a été passée avec succès. Voici les détails :  
+
+👤 Vendeur :  
+🔹 Nom : ${animal.usernameVendeur}
+🔹 Contact : ${animal.contactPrincipal}  
+🔹 Catégorie : ${animal.categorie}  
+🔖 Numéro de l'annonce : ${animal.codeVendeur}  
+📍 Localisation : Latitude ${animal.location.latitude}, Longitude ${animal.location.longitude}  
+
+👤 Acheteur :  
+🔹 Nom : ${visitorInfo.username}  
+🔹 Contact : ${visitorInfo.contact}  
+🔹 E-mail : ${visitorInfo.email}  
+🔹 Quartier : ${visitorInfo.quartier}  
+📦 Quantité demandée : ${visitorInfo.quantity}  
+
+💰 Total à payer : ${totalPrice} FCFA  
+📍 Coordonnées d'achat : Latitude ${purchaseDetails.location.latitude}, Longitude ${purchaseDetails.location.longitude}  
+
+Merci de confirmer cette commande et de planifier la livraison.
+
+Cordialement,  
+L’équipe FarmsConnect 
+        `;
+        console.log("Envoi de l'email à FarmsConnect");
+        await sendEmail(emailSubjectFarmsConnect, emailContentFarmsConnect, "kaboreabwa2020@gmail.com");
+
+        console.log("Planification de l'email client");
+        await scheduleClientEmail(purchaseDetails);
+
+        console.log("Affichage de l'alerte de confirmation");
+        showAlert("Votre achat a été confirmé ! Un email contenant les détails de votre achat vous a été envoyé.");
+    } catch (error) {
+        console.error("Erreur lors du traitement des emails :", error);
+    }
+}
+
+// Fonction générique pour envoyer un email
+function sendEmail(subject, content, email) {
+    fetch('https://farmsconnect.netlify.app/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subject, content, email })
+    }).then(response => {
+        if (response.ok) {
+            console.log(`Email envoyé avec succès à ${email}.`);
+        } else {
+            console.error(`Erreur lors de l'envoi de l'email à ${email}.`);
+            response.text().then(text => console.error("Détail de l'erreur :", text));
+        }
+    }).catch(error => {
+        console.error(`Erreur réseau lors de l'envoi de l'email à ${email} :`, error);
+    });
+}
+
+// Planification de l'email pour le client
+function scheduleClientEmail(purchaseDetails) {
+    fetch('https://farmsconnect.netlify.app/api/schedule-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ purchaseDetails, delay: 24 })
+    }).then(response => {
+        if (response.ok) {
+            console.log("Email planifié pour le client dans 24h.");
+        } else {
+            console.error("Erreur lors de la planification de l'email.");
+        }
+    }).catch(error => console.error("Erreur réseau lors de la planification de l'email :", error));
+}
+
+
+
+</script>    
+    
+        </script>
+                
+            
+
+    <script src="script_Visiter.js"></script>
+
+    <div class="alert hidden" id="customAlert">
+        <div class="alert-content">
+            <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo" class="alert-image">
+            <p id="alertMessage"></p>
+            <button class="alert-close-button" onclick="closeAlert()">×</button>
+        </div>
+    </div>
+
+
+</body>
+</html>

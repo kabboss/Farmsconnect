@@ -1,0 +1,221 @@
+/* Forum.css */
+
+/* Importation des polices */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+
+/* Réinitialisation des marges et paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corps du site */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #d4fc79, #96e6a1);
+    color: #333;
+    line-height: 1.6;
+}
+
+/* En-tête */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: slide-down 1s ease-out;
+}
+
+/* Animation de glissement pour l'en-tête */
+@keyframes slide-down {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    height: 50px;
+    margin-right: 10px;
+    animation: fade-in 2s ease;
+}
+
+/* Titre du site */
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
+/* Navigation */
+.nav {
+    position: relative;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-list li {
+    position: relative;
+}
+
+.nav-list a {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-list a:hover {
+    color: #2e7d32;
+    transform: scale(1.1);
+}
+
+/* Animation pour le lien actif */
+.nav-list .active {
+    color: #2e7d32;
+    font-weight: 700;
+    border-bottom: 2px solid #2e7d32;
+}
+
+/* Menu responsive */
+.menu-icon span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #333;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle:checked + .menu-icon span {
+    background: #2e7d32;
+}
+
+/* Section de tri */
+.sorting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+}
+
+.sort-label {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-right: 1rem;
+}
+
+.sort-select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 2px solid #2e7d32;
+    border-radius: 5px;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.sort-select:hover {
+    box-shadow: 0 0 10px rgba(46, 125, 50, 0.5);
+}
+
+/* Section Forum */
+#forum {
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    max-width: 800px;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    animation: fade-in 1.5s ease;
+}
+
+/* Animation d'apparition */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.message-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+/* Formulaire de message */
+.message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#message-input {
+    width: 100%;
+    height: 100px;
+    padding: 0.8rem;
+    border: 2px solid #2e7d32;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+#message-input:focus {
+    outline: none;
+    border-color: #2e7d32;
+    box-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
+}
+
+/* Bouton publier */
+.submit-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    background: #2e7d32;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+    background: #1b5e20;
+    transform: translateY(-3px);
+}
+
+/* Pied de page */
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background: #f1f1f1;
+    margin-top: 2rem;
+    animation: fade-in 2s ease;
+}
+
+/* Effet de survol sur tout le site */
+button, input, select, textarea {
+    transition: all 0.3s ease;
+}
