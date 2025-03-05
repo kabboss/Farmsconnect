@@ -280,8 +280,7 @@ header {
     width: 160%; /* Augmenter un peu pour mieux couvrir l'écran sur les petits appareils */
     height: 120%;
     background: radial-gradient(ellipse, rgb(238, 241, 3), transparent);
-    animation: floatingGradient 3s linear infinite;
-    z-index: 1;
+    z-index: 0.5;
 }
 
 /* Responsive Design pour les petits écrans */
@@ -299,17 +298,6 @@ header {
     }
 }
 
-@keyframes floatingGradient {
-    0% {
-        transform: translate(0, 0) rotate(0);
-    }
-    50% {
-        transform: translate(30px, 30px) rotate(45deg); /* Réduire les mouvements */
-    }
-    100% {
-        transform: translate(0, 0) rotate(360deg);
-    }
-}
 
 .hero-content {
     position: relative;
@@ -1090,7 +1078,6 @@ a {
     background: radial-gradient(circle, rgba(240, 4, 4, 0.2) 10%, transparent 20%);
     background-size: 5% 5%;
     z-index: 1;
-    animation: particles 4s infinite linear;
   }
   
   @keyframes particles {

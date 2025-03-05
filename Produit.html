@@ -1165,7 +1165,7 @@ document.addEventListener('deviceready', function () {
             console.error("Erreur lors de la vérification de l'état du GPS : ", error);
         });
     } else {
-        // Si Cordova n'est pas disponible, on vérifie directement la permission et la géolocalisation standard
+        // Si Cordova n'est pas disponible (c'est-à-dire en mode navigateur), on demande directement la localisation
         demanderPermissionLocalisation();
     }
 });
