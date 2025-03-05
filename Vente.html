@@ -148,99 +148,100 @@
     
 
 
-    <script>
-// Gestion de la modale
-const openModalButton = document.querySelector('.open-modal-button');
-const modal = document.getElementById('modal');
-const closeButton = document.querySelector('.close-button');
-
-// Afficher la modale
-openModalButton?.addEventListener('click', (e) => {
-    e.preventDefault();  // Empêche le comportement par défaut (soumission du formulaire)
-    modal.classList.add('visible');  // Affiche la modale en ajoutant la classe 'visible'
-});
-
-// Fermer la modale
-closeButton?.addEventListener('click', () => {
-    modal.classList.remove('visible');  // Cache la modale en enlevant la classe 'visible'
-});
-
-// Clic en dehors de la modale pour la fermer
-window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        modal.classList.remove('visible');  // Cache la modale si le clic est en dehors de celle-ci
-    }
-});
-
-
-
-        // Gestion des interactions de formulaire
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("vente-form");
-            const spinner = document.getElementById("loadingSpinner");
-            const alertBox = document.getElementById("customAlert");
-            const alertMessage = document.getElementById("alertMessage");
-
-            if (!alertBox) console.error("L'alerte 'customAlert' est introuvable !");
-
-            // Afficher le spinner
-            function showSpinner() {
-                spinner.classList.remove("hidden");
-            }
-
-            // Masquer le spinner
-            function hideSpinner() {
-                spinner.classList.add("hidden");
-            }
-
-            // Afficher une alerte
-            function showAlert(message) {
-                alertMessage.textContent = message;
-                alertBox.classList.remove("hidden");
-                alertBox.classList.add("visible");
-            }
-
-            // Fermer une alerte
-            window.closeAlert = function () {
-                alertBox.classList.add("hidden");
-                alertBox.classList.remove("visible");
-            };
-
-            // Gestionnaire d'événement pour le formulaire
-            form.addEventListener("submit", async function (event) {
-                event.preventDefault(); // Empêche l'envoi par défaut du formulaire
-
-                const emailVendeur = document.getElementById('email-vendeur').value;
-                const contactPrincipal = document.getElementById('contact-principal').value;
-
-                showSpinner(); // Affiche le spinner
-
-                try {
-                    // Vérification des annonces existantes
-                    const response = await fetch(`https://farmsconnect.netlify.app/.netlify/functions/annonces/count?vendeur=${emailVendeur}&contact=${contactPrincipal}`);
-                    const data = await response.json();
-
-                    if (data.annoncesCount >= 3) {
-                        hideSpinner();
-                        showAlert("Vous ne pouvez publier que 3 annonces au maximum.");
-                        return;
-                    }
-
-                    // Si tout est correct
+<script>
+    // Gestion de la modale
+    const openModalButton = document.querySelector('.open-modal-button');
+    const modal = document.getElementById('modal');
+    const closeButton = document.querySelector('.close-button');
+    
+    // Afficher la modale
+    openModalButton?.addEventListener('click', (e) => {
+        e.preventDefault();  // Empêche le comportement par défaut (soumission du formulaire)
+        modal.classList.add('visible');  // Affiche la modale en ajoutant la classe 'visible'
+    });
+    
+    // Fermer la modale
+    closeButton?.addEventListener('click', () => {
+        modal.classList.remove('visible');  // Cache la modale en enlevant la classe 'visible'
+    });
+    
+    // Clic en dehors de la modale pour la fermer
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.remove('visible');  // Cache la modale si le clic est en dehors de celle-ci
+        }
+    });
+    
+    // Gestion des interactions de formulaire
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("vente-form");
+        const spinner = document.getElementById("loadingSpinner");
+        const alertBox = document.getElementById("customAlert");
+        const alertMessage = document.getElementById("alertMessage");
+    
+        if (!alertBox) console.error("L'alerte 'customAlert' est introuvable !");
+    
+        // Afficher le spinner
+        function showSpinner() {
+            spinner.classList.remove("hidden");
+        }
+    
+        // Masquer le spinner
+        function hideSpinner() {
+            spinner.classList.add("hidden");
+        }
+    
+        // Afficher une alerte
+        function showAlert(message, linkMessage = '') {
+            alertMessage.innerHTML = message + ' ' + linkMessage;
+            alertBox.classList.remove("hidden");
+            alertBox.classList.add("visible");
+        }
+    
+        // Fermer une alerte
+        window.closeAlert = function () {
+            alertBox.classList.add("hidden");
+            alertBox.classList.remove("visible");
+        };
+    
+        // Gestionnaire d'événement pour le formulaire
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Empêche l'envoi par défaut du formulaire
+    
+            const emailVendeur = document.getElementById('email-vendeur').value;
+            const contactPrincipal = document.getElementById('contact-principal').value;
+    
+            showSpinner(); // Affiche le spinner
+    
+            try {
+                // Vérification des annonces existantes
+                const response = await fetch(`https://farmsconnect.netlify.app/.netlify/functions/annonces/count?vendeur=${emailVendeur}&contact=${contactPrincipal}`);
+                const data = await response.json();
+    
+                if (data.annoncesCount >= 3) {
                     hideSpinner();
-                    showAlert("Veuillez patientez.!Ne toucher à rien si l'annonce n'est pas envoyer ");
-                    showAlert("Annonce envoyée avec succès! 😀 Vous pouvez fermer !!");
-
-                } catch (error) {
-                    console.error("Erreur :", error);
-                    hideSpinner();
-                    showAlert("Une erreur est survenue. Veuillez réessayer.");
+                    showAlert("Vous ne pouvez publier que 3 annonces au maximum.");
+                    return;
                 }
-            });
+    
+                // Si tout est correct
+                hideSpinner();
+                showAlert("Veuillez patientez! Ne touchez à rien si l'annonce n'est pas envoyée.");
+    
+                // Afficher le message de succès avec un lien
+                const successMessage = 'Annonce envoyée avec succès! 😀 ';
+                const linkMessage = '<a href="visiter.html" class="alert-link">Voir mon annonce</a>';
+                showAlert(successMessage, linkMessage);
+    
+            } catch (error) {
+                console.error("Erreur :", error);
+                hideSpinner();
+                showAlert("Une erreur est survenue. Veuillez réessayer.");
+            }
         });
+    });
     </script>
-
-        </form>
+            </form>
     </section>
     
     

@@ -212,10 +212,7 @@ function sendData(animal) {
             console.log("Annonce envoyée avec succès", data);
             showAlert("Annonce envoyée avec succès! 😀 Vous pouvez fermer !!");
         
-            // Recharge la page après l'envoi
-            setTimeout(() => {
-                location.reload(); // Recharge la page après un délai de 1 seconde
-            }, 3000);
+           
         })
 
         
