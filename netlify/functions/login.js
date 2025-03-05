@@ -1,12 +1,41 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../../models/User");  // Adapte le chemin de ton modèle User
 
-// Connecte-toi à MongoDB ici si ce n'est pas déjà fait
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('../../models/User');  // Adapte le chemin de ton modèle User
+
+// Se connecter à MongoDB
+const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connecté à MongoDB...'))
+    .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
 exports.handler = async (event, context) => {
-  const { username, email, contact, password } = JSON.parse(event.body);
+  // Vérification de la méthode HTTP
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,  // Method Not Allowed
+      body: JSON.stringify({ message: 'Méthode non autorisée. Utilisez POST.' }),
+    };
+  }
+
+  let data = {};
+
+  // Sécuriser le parsing JSON
+  try {
+    if (event.body) {
+      data = JSON.parse(event.body);
+    } else {
+      throw new Error('Le corps de la requête est vide');
+    }
+  } catch (parseError) {
+    return {
+      statusCode: 400,  // Bad Request
+      body: JSON.stringify({ message: 'Données JSON invalides. Assurez-vous d\'envoyer un JSON valide.' }),
+    };
+  }
+
+  const { username, email, contact, password } = data;
 
   // Validation des données reçues
   if (!username || !email || !contact || !password) {
@@ -17,6 +46,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // Recherche de l'utilisateur par son nom d'utilisateur
     const user = await User.findOne({ username });
     if (!user || user.email !== email || user.contact !== contact) {
       return {
@@ -25,6 +55,7 @@ exports.handler = async (event, context) => {
       };
     }
 
+    // Vérification du mot de passe
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return {
@@ -33,14 +64,14 @@ exports.handler = async (event, context) => {
       };
     }
 
+    // Création du token JWT
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET || 'ka23bo23re23',
       { expiresIn: '1h' }
     );
 
-    // Le cookie n'est pas directement supporté sur Netlify Functions
-    // mais si tu veux ajouter un cookie, tu dois retourner le header approprié
+    // Réponse avec le token et les infos utilisateur
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -51,8 +82,9 @@ exports.handler = async (event, context) => {
         message: 'Connexion réussie !',
       }),
       headers: {
-        'Set-Cookie': `token=${token}; HttpOnly; Max-Age=3600; Path=/; SameSite=Strict; Secure=${process.env.NODE_ENV === 'production' ? 'true' : 'false'}`,
         'Content-Type': 'application/json',
+        // Décommente si tu veux utiliser un cookie
+        // 'Set-Cookie': `token=${token}; HttpOnly; Max-Age=3600; Path=/; SameSite=Strict; Secure=${process.env.NODE_ENV === 'production' ? 'true' : 'false'}`,
       },
     };
 
