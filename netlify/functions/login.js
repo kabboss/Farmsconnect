@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -11,11 +10,29 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
 exports.handler = async (event, context) => {
-  // Vérification de la méthode HTTP
+  // Gérer les requêtes préflight CORS (OPTIONS)
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204, // No Content
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+      body: '',
+    };
+  }
+
+  // Vérification de la méthode HTTP (accepter uniquement POST)
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,  // Method Not Allowed
       body: JSON.stringify({ message: 'Méthode non autorisée. Utilisez POST.' }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      }
     };
   }
 
@@ -32,6 +49,11 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 400,  // Bad Request
       body: JSON.stringify({ message: 'Données JSON invalides. Assurez-vous d\'envoyer un JSON valide.' }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      }
     };
   }
 
@@ -42,6 +64,11 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 400,
       body: JSON.stringify({ message: "Tous les champs sont requis." }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      }
     };
   }
 
@@ -52,6 +79,11 @@ exports.handler = async (event, context) => {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: 'Informations incorrectes.' }),
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        }
       };
     }
 
@@ -61,6 +93,11 @@ exports.handler = async (event, context) => {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: 'Mot de passe incorrect.' }),
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        }
       };
     }
 
@@ -82,10 +119,11 @@ exports.handler = async (event, context) => {
         message: 'Connexion réussie !',
       }),
       headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Content-Type': 'application/json',
-        // Décommente si tu veux utiliser un cookie
-        // 'Set-Cookie': `token=${token}; HttpOnly; Max-Age=3600; Path=/; SameSite=Strict; Secure=${process.env.NODE_ENV === 'production' ? 'true' : 'false'}`,
-      },
+      }
     };
 
   } catch (error) {
@@ -93,6 +131,11 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Erreur serveur : ' + error.message }),
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      }
     };
   }
 };
