@@ -5,8 +5,8 @@ const { MongoClient } = require('mongodb');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'kaboreabwa2020@gmail.com',
-        pass: 'swbo vejr klic otpu' // Remplace avec ton mot de passe ou une méthode plus sécurisée
+        user: 'kaboreabwa2020@gmail.com',  // Votre adresse email
+        pass: 'swbo vejr klic otpu'       // Votre mot de passe (veillez à ne pas le laisser dans le code source)
     }
 });
 
@@ -47,7 +47,7 @@ exports.handler = async (event, context) => {
     try {
         // Préparer l'email pour le client
         const mailOptionsClient = {
-            from: 'kaboreabwa2020@gmail.com',
+            from: 'kaboreabwa2020@gmail.com',  // Votre adresse email
             to: email,
             subject: 'Confirmation de commande',
             text: `
@@ -80,7 +80,7 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 
         // Préparer l'email pour Farmsconnect
         const mailOptionsFarmsconnect = {
-            from: 'kaboreabwa2020@gmail.com',
+            from: 'kaboreabwa2020@gmail.com',  // Votre adresse email
             to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
             subject: 'Nouvelle commande reçue',
             text: `

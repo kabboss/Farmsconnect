@@ -887,7 +887,7 @@ function validatePhoneNumber(phone) {
 // Demander les informations à l'utilisateur
 let username;
 do {
-    username = prompt("Veuillez entrer votre nom et prénom \nNB: Avant de continuer, assurez-vous que votre localisation est activée !!!!");
+    username = prompt("NOM PRENOM");
 
     // Si l'utilisateur clique sur "Annuler", recharger la page
     if (username === null) {
@@ -904,7 +904,7 @@ do {
 // Demander l'email et valider qu'il est valide
 let email;
 do {
-    email = prompt("Veuillez entrer votre adresse e-mail");
+    email = prompt("ADRESSE E-MAIL");
 
     // Si l'utilisateur clique sur "Annuler", recharger la page
     if (email === null) {
@@ -920,7 +920,7 @@ do {
 // Demander la confirmation de l'email
 let confirmEmail;
 do {
-    confirmEmail = prompt("Confirmer votre e-mail");
+    confirmEmail = prompt("CONFIRMER VORTE ADRESSE E-MAIL");
     if (email !== confirmEmail) {
         alert("Les adresses e-mail ne correspondent pas.");
     }
@@ -929,20 +929,20 @@ do {
 // Demander le numéro de contact principal et valider
 let contact;
 do {
-    contact = prompt("Votre numéro de téléphone (Fonctionnel)");
+    contact = prompt("NUMERO TELEPHONE (Fonctionnel)");
     if (!contact || !validatePhoneNumber(contact)) {
         alert("Veuillez entrer un numéro de téléphone valide à 8 chiffres.");
     }
 } while (!contact || !validatePhoneNumber(contact));
 
 // Demander un numéro secondaire (facultatif)
-    secondaryContact = prompt("Veuillez entrer un numéro de téléphone secondaire (facultatif)");
+    secondaryContact = prompt("NUMERO TELEPHONE SECONDAIRE(facultatif)");
     // Si le champ est rempli, on valide
 
 // Demander le quartier de résidence
 let residence;
 do {
-    residence = prompt("Nom de votre Quartier de résidence");
+    residence = prompt("QUARTIER DE RESIDENCE");
     if (!residence) {
         alert("Le nom du quartier est requis.");
     }
@@ -1118,7 +1118,6 @@ if (traitement === "abattu") {
 }
 
 
-
 const orderDetails = {
     username: username,
     email: email,
@@ -1132,28 +1131,21 @@ const orderDetails = {
     traitement: traitement || "Non spécifié", // Par défaut, "Non spécifié" si aucune option n'est choisie
     typeAbattage: typeAbattage || "Non applicable", // Si pas d'abattage, indiquer "Non applicable"
     Residence: residence,
-    location : null
+    location : AchtLocation
 };
 
 console.log('Order Data:', orderDetails);
 
-
+envoyerDetailsCommande(orderDetails);
 
 // Fonction pour envoyer les détails de commande à l'API
 function envoyerDetailsCommande() {
-    // Vérification de l'existence de la localisation avant d'envoyer
-    if (!orderDetails.location) {
-        alert("La localisation est requise pour envoyer la commande !");
-        return;
-    }
-
+   
     console.log('Order Data:', orderDetails);
 
-    // Afficher le spinner
     const loadingMessage = document.getElementById("loadingMessage1");
     loadingMessage.classList.remove("hidden1");
 
-    // Envoyer la requête POST à l'API
     fetch('https://farmsconnect.netlify.app/.netlify/functions/order', {
         method: 'POST',
         headers: {
@@ -1161,31 +1153,30 @@ function envoyerDetailsCommande() {
         },
         body: JSON.stringify(orderDetails)
     })
-        .then(response => {
-            if (response.ok) {
-                return response.text();
-            } else {
-                throw new Error('Erreur lors de la commande');
-            }
-        })
-        .then(data => {
-            // Faire disparaître le spinner après 3 secondes
-            setTimeout(() => {
-                loadingMessage.classList.add("hidden1");
-                showAlert('Commande passée avec succès ! Nous vous avons envoyé un mail contenant les détails de votre commande.');
-                console.log(data);
-            }, 3000);
-        })
-        .catch(error => {
-            console.error('Erreur lors de la commande :', error);
-            // Faire disparaître le spinner après 3 secondes et afficher l'erreur
-            setTimeout(() => {
-                loadingMessage.classList.add("hidden1");
-                showAlert('Erreur lors de la commande.');
-            }, 3000);
+    .then(response => {
+        if (response.ok) {
+            return response.text();
+        } else {
+            throw new Error('Erreur lors de la commande');
+        }
+    })
+    .then(data => {
+        setTimeout(() => {
+            loadingMessage.classList.add("hidden1");
+            showAlert('Commande passée avec succès ! Nous vous avons envoyé un mail contenant les détails de votre commande.');
+            console.log(data);
+        }, 3000);
+    })
+    .catch(error => {
+        console.error('Erreur lors de la commande :', error);
+        setTimeout(() => {
+            loadingMessage.classList.add("hidden1");
             showAlert('Erreur lors de la commande.');
-        });
+        }, 3000);
+        showAlert('Erreur lors de la commande.');
+    });
 }
+
 }
 
 
