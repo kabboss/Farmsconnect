@@ -8,8 +8,20 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connecté à MongoDB...'))
   .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
-exports.handler = async (event, context) => {
-    // Vérification que la méthode est bien POST
+  exports.handler = async (event, context) => {
+    // Gérer les requêtes préflight CORS (OPTIONS)
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 204, // No Content
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            body: '',
+        };
+    }
+
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,  // Method Not Allowed

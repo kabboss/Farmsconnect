@@ -8,8 +8,20 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Fonction Lambda pour planifier l'email
 exports.handler = async (event, context) => {
+    // Gérer les requêtes préflight CORS (OPTIONS)
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 204, // No Content
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            body: '',
+        };
+    }
+
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405, // Méthode non autorisée

@@ -7,8 +7,21 @@ const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connecté à MongoDB...'))
   .catch(err => console.error('Erreur de connexion à MongoDB:', err));
-// Fonction Lambda
-exports.handler = async (event, context) => {
+  
+  exports.handler = async (event, context) => {
+    // Gérer les requêtes préflight CORS (OPTIONS)
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 204, // No Content
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            body: '',
+        };
+    }
+
     if (event.httpMethod !== 'DELETE') {
         return {
             statusCode: 405,  // Méthode non autorisée

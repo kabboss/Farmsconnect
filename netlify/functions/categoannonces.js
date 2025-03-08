@@ -1,33 +1,62 @@
 const mongoose = require('mongoose');
-const Annonce = require('../../models/Annonce'); // Assure-toi que le modèle est bien défini
+const Annonce = require('../../models/Annonce'); // Vérifie le chemin
 require('dotenv').config();
 
-// Connexion à MongoDB (avec l'URI en dur)
+// ✅ Connexion à MongoDB (évite les connexions multiples)
 const dbConnect = async () => {
-    try {
-        if (mongoose.connection.readyState === 0) {
+    if (mongoose.connection.readyState === 0) {
+        try {
             await mongoose.connect('mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority', {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
             console.log("✅ Connecté à MongoDB");
+        } catch (error) {
+            console.error("❌ Erreur de connexion MongoDB:", error);
+            throw new Error("Impossible de se connecter à la base de données");
         }
-    } catch (error) {
-        console.error("❌ Erreur de connexion MongoDB:", error);
-        throw new Error("Impossible de se connecter à la base de données");
     }
 };
 
 exports.handler = async (event) => {
-    try {
-        await dbConnect(); // Connexion à la base de données
+    console.log("📩 Requête reçue :", event.httpMethod, event.queryStringParameters);
 
-        // Récupération des paramètres de pagination
-        const page = parseInt(event.queryStringParameters?.page) || 1;
-        const limit = parseInt(event.queryStringParameters?.limit) || 10;
+    // ✅ **Gérer les requêtes préflight CORS (OPTIONS)**
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 204, // No Content
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            body: '',
+        };
+    }
+
+    // ✅ **Autoriser uniquement GET**
+    if (event.httpMethod !== 'GET') {
+        return {
+            statusCode: 405,  // Method Not Allowed
+            body: JSON.stringify({ success: false, message: 'Méthode non autorisée. Utilisez GET.' }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Content-Type': 'application/json',
+            }
+        };
+    }
+
+    try {
+        await dbConnect(); // ✅ Connexion à la base de données
+
+        // ✅ **Récupération et validation des paramètres de pagination**
+        const page = Math.max(1, parseInt(event.queryStringParameters?.page) || 1); // Min 1
+        const limit = Math.min(50, Math.max(1, parseInt(event.queryStringParameters?.limit) || 10)); // Min 1, Max 50
         const skip = (page - 1) * limit;
 
-        // Pipeline d'agrégation pour regrouper les annonces par catégorie et prix
+        // ✅ **Pipeline d'agrégation pour regrouper les annonces par catégorie et tranche de prix**
         const annonces = await Annonce.aggregate([
             {
                 $addFields: {
@@ -69,7 +98,12 @@ exports.handler = async (event) => {
                 totalCount,
                 annonces
             }),
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Content-Type': 'application/json',
+            }
         };
     } catch (error) {
         console.error("❌ Erreur API:", error);
@@ -80,7 +114,12 @@ exports.handler = async (event) => {
                 message: "Erreur lors de la récupération des annonces",
                 error: error.message
             }),
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Content-Type': 'application/json',
+            }
         };
     }
 };

@@ -1,49 +1,100 @@
 const mongoose = require('mongoose');
-const Annonce = require('../../models/Annonce');  // Assure-toi que tu as le modèle 'Annonce' défini
+const Annonce = require('../../models/Annonce'); // Vérifie le chemin
 
-// Connexion à MongoDB dans la fonction (important car les fonctions Lambda sont stateless)
 const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority';
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connecté à MongoDB...'))
-  .catch(err => console.error('Erreur de connexion à MongoDB:', err));
+// ✅ Connexion à MongoDB (évite les connexions multiples)
+const dbConnect = async () => {
+    if (mongoose.connection.readyState === 0) {
+        try {
+            await mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+            console.log("✅ Connecté à MongoDB");
+        } catch (error) {
+            console.error("❌ Erreur de connexion MongoDB:", error);
+            throw new Error("Impossible de se connecter à la base de données");
+        }
+    }
+};
 
-// Fonction Lambda
 exports.handler = async (event, context) => {
-    if (event.httpMethod !== 'GET') {
+    console.log("📩 Requête reçue :", event.httpMethod, event.queryStringParameters);
+
+    // ✅ **Gérer les requêtes préflight CORS (OPTIONS)**
+    if (event.httpMethod === 'OPTIONS') {
         return {
-            statusCode: 405,  // Method Not Allowed
-            body: JSON.stringify({ message: 'Méthode non autorisée' })
+            statusCode: 204, // No Content
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            body: '',
         };
     }
 
-    // Récupérer les paramètres de la requête
-    const { vendeur, contact } = event.queryStringParameters;
-
-    if (!vendeur || !contact) {
+    // ✅ **Autoriser uniquement GET**
+    if (event.httpMethod !== 'GET') {
         return {
-            statusCode: 400,  // Bad Request
-            body: JSON.stringify({ message: 'Paramètres manquants : vendeur et contact sont nécessaires.' })
+            statusCode: 405,  // Method Not Allowed
+            body: JSON.stringify({ success: false, message: 'Méthode non autorisée. Utilisez GET.' }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Content-Type': 'application/json',
+            }
         };
     }
 
     try {
-        // Récupérer le nombre d'annonces pour ce vendeur et contact
-        const annoncesCount = await Annonce.countDocuments({
-            emailVendeur: vendeur,
-            contactPrincipal: contact
-        });
+        await dbConnect(); // ✅ Connexion à la base de données
 
-        // Retourner la réponse avec le nombre d'annonces
+        // ✅ **Vérification des paramètres de requête**
+        const vendeur = event.queryStringParameters?.vendeur?.trim();
+        const contact = event.queryStringParameters?.contact?.trim();
+
+        if (!vendeur || !contact) {
+            return {
+                statusCode: 400,  // Bad Request
+                body: JSON.stringify({ success: false, message: 'Paramètres manquants : vendeur et contact sont nécessaires.' }),
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    'Content-Type': 'application/json',
+                }
+            };
+        }
+
+        // ✅ **Récupérer le nombre d'annonces pour ce vendeur et contact**
+        const annoncesCount = await Annonce.countDocuments({ emailVendeur: vendeur, contactPrincipal: contact });
+
+        // ✅ **Retourner la réponse avec le nombre d'annonces**
         return {
             statusCode: 200,  // OK
-            body: JSON.stringify({ annoncesCount })
+            body: JSON.stringify({ success: true, annoncesCount }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Content-Type': 'application/json',
+            }
         };
     } catch (error) {
-        console.error('Erreur lors de la récupération des annonces:', error);
+        console.error("❌ Erreur lors de la récupération des annonces:", error);
         return {
             statusCode: 500,  // Internal Server Error
-            body: JSON.stringify({ message: 'Erreur serveur.' })
+            body: JSON.stringify({
+                success: false,
+                message: "Erreur serveur lors de la récupération des annonces",
+                error: error.message
+            }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Content-Type': 'application/json',
+            }
         };
     }
 };

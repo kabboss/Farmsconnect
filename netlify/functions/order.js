@@ -6,11 +6,25 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'kaboreabwa2020@gmail.com',
-        pass: 'swbo vejr klic otpu' // Remplace avec ton mot de passe ou utilise une méthode plus sécurisée comme les variables d'environnement
+        pass: 'swbo vejr klic otpu' // Remplace avec ton mot de passe ou une méthode plus sécurisée
     }
 });
 
 exports.handler = async (event, context) => {
+    // Gérer les requêtes préflight CORS (OPTIONS)
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 204, // No Content
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            },
+            body: '',
+        };
+    }
+
+    // Vérifier si la méthode HTTP est bien POST
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -18,10 +32,10 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Récupérer les données du corps de la requête
+    // Récupérer les données envoyées dans le corps de la requête
     const { username, email, contact, contact2, price, quantity, weight, Produit: nomproduit, traitement, typeAbattage, NomAbattre, Residence, location } = JSON.parse(event.body);
 
-    // Vérification que le traitement est défini
+    // Vérifier que le traitement est bien défini
     if (!traitement) {
         console.error("Erreur : La variable 'traitement' est manquante dans la requête.");
         return {
