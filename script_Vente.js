@@ -215,7 +215,7 @@ function sendData(animal) {
             // Recharge la page après l'envoi
             setTimeout(() => {
                 location.reload(); // Recharge la page après un délai de 1 seconde
-            }, 3000);
+            }, 7000);
         })
 
         
