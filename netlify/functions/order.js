@@ -1,12 +1,12 @@
+
 const nodemailer = require('nodemailer');
-const { MongoClient } = require('mongodb');
 
 // Configuration de Nodemailer pour l'envoi des emails
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'kaboreabwa2020@gmail.com',  // Votre adresse email
-        pass: 'swbo vejr klic otpu'       // Votre mot de passe (veillez à ne pas le laisser dans le code source)
+        user: 'kaboreabwa2020@gmail.com',
+        pass: 'swbo vejr klic otpu'  // Utilise un mot de passe d'application sécurisé pour Gmail
     }
 });
 
@@ -28,7 +28,12 @@ exports.handler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
-            body: JSON.stringify({ error: 'Méthode HTTP non autorisée, utilisez POST.' })
+            body: JSON.stringify({ error: 'Méthode HTTP non autorisée, utilisez POST.' }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            }
         };
     }
 
@@ -40,16 +45,21 @@ exports.handler = async (event, context) => {
         console.error("Erreur : La variable 'traitement' est manquante dans la requête.");
         return {
             statusCode: 400,
-            body: JSON.stringify({ error: "L'option de traitement est requise." })
+            body: JSON.stringify({ error: "L'option de traitement est requise." }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            }
         };
     }
 
     try {
         // Préparer l'email pour le client
         const mailOptionsClient = {
-            from: 'kaboreabwa2020@gmail.com',  // Votre adresse email
+            from: 'kaboreabwa2020@gmail.com',
             to: email,
-            subject: 'Confirmation de commande',
+            subject: '🟢Confirmation de commande',
             text: `
 🛒✨ Merci, ${username}, pour votre commande !
 
@@ -80,8 +90,8 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
 
         // Préparer l'email pour Farmsconnect
         const mailOptionsFarmsconnect = {
-            from: 'kaboreabwa2020@gmail.com',  // Votre adresse email
-            to: 'kaboreabwa2020@gmail.com', // Destinataire: Farmsconnect
+            from: 'kaboreabwa2020@gmail.com',
+            to: 'kaboreabwa2020@gmail.com',
             subject: 'Nouvelle commande reçue',
             text: `
 📩 Nouvelle commande reçue !
@@ -115,14 +125,24 @@ Le prix du produit peut augmenter en fonction du poids choisi. Chaque kilogramme
         // Répondre avec succès
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'Commande passée avec succès, e-mails envoyés !' })
+            body: JSON.stringify({ message: 'Commande passée avec succès, e-mails envoyés !' }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            }
         };
 
     } catch (error) {
         console.error('Erreur lors de la commande :', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Erreur lors de la commande : ' + error.message })
+            body: JSON.stringify({ error: 'Erreur lors de la commande : ' + error.message }),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            }
         };
     }
 };
