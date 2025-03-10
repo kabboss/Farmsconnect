@@ -1,50 +1,66 @@
 // Variable globale pour stocker la localisation
 let vendLocation = null;
 
-// Vérifie si l'environnement est Cordova ou non
+// Vérifie si l'environnement est Cordova (application mobile) ou un navigateur classique
 const isCordova = !!window.cordova;
 
-// Charge les fonctionnalités dès que la page ou Cordova est prêt
-document.addEventListener(isCordova ? 'deviceready' : 'DOMContentLoaded', function () {
-    initializeLocationCheck();
-});
+// Charge les fonctionnalités dès que Cordova ou le DOM est prêt
+document.addEventListener(isCordova ? 'deviceready' : 'DOMContentLoaded', initializeLocationCheck);
 
 // Initialisation de la vérification de localisation
 function initializeLocationCheck() {
     if (isCordova) {
-        checkGPSAndRequestPermission();
+        checkGPSAndRequestPermission(); // Vérification GPS et permissions sous Cordova
     } else {
-        checkBrowserGeolocation();
+        checkBrowserGeolocation(); // Vérification géolocalisation sur navigateur
     }
 }
 
-// Vérifie si le GPS est activé et demande les permissions
+// Vérifie si le GPS est activé et demande les permissions sous Cordova
 function checkGPSAndRequestPermission() {
-    cordova.plugins.diagnostic.isLocationEnabled(function (enabled) {
-        if (enabled) {
-            checkCordovaPermission();
-        } else {
-            cordova.plugins.diagnostic.switchToLocationSettings();
-            setTimeout(() => {
-                cordova.plugins.diagnostic.isLocationEnabled(function (enabledAfterSwitch) {
-                    if (enabledAfterSwitch) {
-                        checkCordovaPermission();
-                    } else {
-                        showAlert("❌ Veuillez activer le GPS pour continuer.");
-                    }
-                }, function (error) {
-                    showAlert("❌ Erreur lors de la vérification du GPS : " + error);
-                });
-            }, 5000);
+    if (!cordova.plugins || !cordova.plugins.diagnostic) {
+        showAlert("❌ Plugin de diagnostic indisponible. Impossible de vérifier le GPS.");
+        return;
+    }
+
+    cordova.plugins.diagnostic.isLocationEnabled(
+        function (enabled) {
+            if (enabled) {
+                checkCordovaPermission();
+            } else {
+                // Demande à l'utilisateur d'activer le GPS
+                cordova.plugins.diagnostic.switchToLocationSettings();
+                setTimeout(() => {
+                    cordova.plugins.diagnostic.isLocationEnabled(
+                        function (enabledAfterSwitch) {
+                            if (enabledAfterSwitch) {
+                                checkCordovaPermission();
+                            } else {
+                                showAlert("❌ Veuillez activer le GPS pour continuer.");
+                            }
+                        },
+                        function (error) {
+                            showAlert("❌ Erreur lors de la vérification du GPS : " + error);
+                        }
+                    );
+                }, 5000);
+            }
+        },
+        function (error) {
+            showAlert("❌ Erreur lors de la vérification du GPS : " + error);
         }
-    }, function (error) {
-        showAlert("❌ Erreur lors de la vérification du GPS : " + error);
-    });
+    );
 }
 
-// Vérifie les permissions sous Cordova
+// Vérifie et demande les permissions de localisation sous Cordova
 function checkCordovaPermission() {
+    if (!cordova.plugins || !cordova.plugins.permissions) {
+        showAlert("❌ Plugin de permissions indisponible. Impossible de vérifier les permissions.");
+        return;
+    }
+
     const permissions = cordova.plugins.permissions;
+
     permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, function (status) {
         if (status.hasPermission) {
             requestGeolocation();
@@ -64,16 +80,32 @@ function checkCordovaPermission() {
     });
 }
 
-// Vérifie la géolocalisation dans un navigateur
+// Vérifie et demande la géolocalisation pour un navigateur
 function checkBrowserGeolocation() {
     if (!navigator.geolocation) {
-        showAlert("❌ La géolocalisation n'est pas supportée par votre appareil ou navigateur.");
+        showAlert("❌ La géolocalisation n'est pas supportée par votre navigateur.");
         return;
     }
-    requestGeolocation();
+
+    // Vérifie si la permission est déjà accordée (sur les navigateurs modernes)
+    if (navigator.permissions) {
+        navigator.permissions.query({ name: "geolocation" })
+            .then(function (result) {
+                if (result.state === "granted" || result.state === "prompt") {
+                    requestGeolocation();
+                } else {
+                    showAlert("❌ Permission de localisation refusée. Activez-la dans vos paramètres.");
+                }
+            })
+            .catch(function (error) {
+                showAlert("❌ Erreur lors de la vérification des permissions : " + error);
+            });
+    } else {
+        requestGeolocation();
+    }
 }
 
-// Demande la position géographique
+// Demande la position géographique (utilisé pour Cordova et navigateur)
 function requestGeolocation() {
     navigator.geolocation.getCurrentPosition(
         function (position) {
@@ -81,13 +113,21 @@ function requestGeolocation() {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
             };
-            console.log("Position détectée :", vendLocation);
+            console.log("📍 Position détectée :", vendLocation);
         },
         function (error) {
-            if (error.code === error.PERMISSION_DENIED) {
-                showAlert("❌ Permission de localisation refusée. Veuillez l'activer dans vos paramètres.");
-            } else {
-                showAlert("❌ Impossible de récupérer votre position. Vérifiez si la localisation est activée.");
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    showAlert("❌ Permission de localisation refusée. Veuillez l'activer dans les paramètres.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    showAlert("❌ Position indisponible. Vérifiez si votre GPS fonctionne.");
+                    break;
+                case error.TIMEOUT:
+                    showAlert("❌ Délai d'attente dépassé. Essayez à nouveau.");
+                    break;
+                default:
+                    showAlert("❌ Erreur inconnue : " + error.message);
             }
         },
         {
@@ -97,6 +137,12 @@ function requestGeolocation() {
         }
     );
 }
+
+// Fonction pour afficher une alerte (à adapter selon ton interface)
+function showAlert(message) {
+    alert(message); // Utilise une alerte basique, peut être remplacée par un modal personnalisé
+}
+
 
 // Gestion du formulaire de vente
 document.getElementById('vente-form').addEventListener('submit', function (e) {

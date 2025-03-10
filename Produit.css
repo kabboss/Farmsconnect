@@ -1308,3 +1308,144 @@ button:hover {
     }
   }
   
+
+
+
+
+
+
+/* Style général du conteneur de la catégorie */
+.categories {
+    text-align: center;
+    margin: 20px auto;
+}
+
+/* Conteneur du bouton avec animation de pulsation */
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+    width: 95%;
+    max-width: 400px;
+}
+
+/* Style du bouton */
+.dropdown-container button {
+    padding: 16px;
+    font-size: 30px;
+    background-color: #3c7ffc;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    animation: pulsate 5s infinite; /* Animation de pulsation */
+}
+
+/* Effet de survol du bouton */
+.dropdown-container button:hover {
+    background-color: #fad609;
+}
+
+/* Animation de pulsation */
+@keyframes pulsate {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1); /* Agrandissement du bouton à la moitié */
+    }
+    100% {
+        transform: scale(1); /* Retour à la taille initiale */
+    }
+}
+
+/* Texte du bouton "Faites votre choix" plus grand */
+.dropdown-container button {
+    font-size: 42px;
+}
+
+/* Style du select (maintenant visible) */
+#categoryDropdown {
+    display: block; /* Rendre le select visible */
+    width: 100%;
+    padding: 15px;
+    font-size: 22px;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+/* Conteneur des produits avec défilement */
+.product-container {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+/* Style pour chaque produit */
+.product {
+    display: none;
+    padding: 20px;
+    margin: 10px 0;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, opacity 0.3s;
+    font-size: 18px;
+    color: #555;
+}
+
+/* Animation pour chaque produit affiché */
+.product.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Effet au survol des produits */
+.product:hover {
+    transform: translateY(-5px);
+    background-color: #f1f1f1;
+}
+
+/* Animation de défilement */
+.product-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.product-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.product-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Responsivité pour petits écrans */
+@media (max-width: 600px) {
+    .dropdown-container button {
+        font-size: 18px;
+        padding: 15px;
+    }
+
+    .product-container {
+        width: 100%;
+        max-height: 400px;
+    }
+
+    .product {
+        font-size: 16px;
+    }
+}

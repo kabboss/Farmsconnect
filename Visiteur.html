@@ -112,13 +112,40 @@ window.onload = function() {
     </script>
 
 
-<section class="categories">
-    <div class="category-list">
-        <button class="category-button" data-category="poulet-local">Poulet local</button>
-        <button class="category-button" data-category="poulet-chair">Poulet de chair</button>
-        <button class="category-button" data-category="poulet-ameliorer">Poulet Amélioré</button>
-        <button class="category-button" data-category="poule-pondeuse">Poule Pondeuse</button>    </div>
+   <!-- Conteneur principal -->
+   <section class="categories">
+    <!-- Bouton principal pour afficher la liste -->
+    <button id="toggleButton" class="toggle-button">Voir Les Annonces</button>
+    
+    <!-- Liste déroulante des catégories (cachée par défaut) -->
+    <div id="categoryList" class="category-list">
+        <button class="category-button" data-category="poulet-local">🐔 Poulet Local</button>
+        <button class="category-button" data-category="poulet-chair">🐓 Poulet de Chair</button>
+        <button class="category-button" data-category="poulet-ameliorer">🐔🌟 Poulet Amélioré</button>
+        <button class="category-button" data-category="poule-pondeuse">🐔🥚 Poule Pondeuse</button>
+    </div>
 </section>
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+    const toggleButton = document.getElementById("toggleButton");
+    const categoryList = document.getElementById("categoryList");
+    const categoryButtons = document.querySelectorAll(".category-button");
+
+    // Événement pour afficher/masquer la liste
+    toggleButton.addEventListener("click", function () {
+        if (categoryList.classList.contains("show")) {
+            categoryList.classList.remove("show");
+            setTimeout(() => categoryList.style.display = "none", 300); // Retarde la disparition pour l'animation
+        } else {
+            categoryList.style.display = "block";
+            setTimeout(() => categoryList.classList.add("show"), 10);
+        }
+    });
+
+});
+
+</script>
+
 
 
 <!-- Section pour les boutons de prix -->
@@ -306,9 +333,7 @@ let userLocation = null;
 
 // Vérification si Cordova est disponible
 if (typeof cordova !== "undefined") {
-    document.addEventListener("deviceready", function () {
-        checkGPSStatusAndRequestPermission();
-    });
+    document.addEventListener("deviceready", checkGPSStatusAndRequestPermission);
 } else {
     // Fallback si Cordova n'est pas disponible
     checkGPSStatusAndRequestPermission();
@@ -320,20 +345,21 @@ function checkGPSStatusAndRequestPermission() {
         const diagnostic = cordova.plugins.diagnostic;
 
         // Vérifie si le GPS est activé
-        diagnostic.isLocationEnabled(function (enabled) {
-            if (!enabled) {
-                // Si le GPS n'est pas activé, on tente de l'activer automatiquement
-                diagnostic.switchToLocationSettings(function () {
-                    console.log("L'utilisateur a été redirigé vers les paramètres pour activer le GPS.");
-                }, function (error) {
-                    console.error("Erreur lors de la redirection vers les paramètres : ", error);
-                });
-            }
-            // Demander la permission de localisation
-            requestLocationPermission();
-        }, function (error) {
-            console.error("Erreur lors de la vérification de l'état du GPS : ", error);
-        });
+        diagnostic.isLocationEnabled(
+            (enabled) => {
+                if (!enabled) {
+                    // Redirection vers les paramètres si GPS désactivé
+                    diagnostic.switchToLocationSettings(
+                        () => console.log("🔄 Redirection vers les paramètres GPS."),
+                        (error) => console.warn("⚠️ Impossible d'ouvrir les paramètres GPS :", error)
+                    );
+                } else {
+                    // Demande la permission seulement si GPS activé
+                    requestLocationPermission();
+                }
+            },
+            (error) => console.error("❌ Erreur lors de la vérification du GPS :", error)
+        );
     } else {
         // Si Cordova n'est pas disponible, utiliser l'API de géolocalisation standard
         requestLocationPermission();
@@ -347,26 +373,29 @@ function requestLocationPermission() {
 
         // Vérifie si la permission est déjà accordée
         permissions.checkPermission(permissions.ACCESS_FINE_LOCATION, (status) => {
-            if (!status.hasPermission) {
-                // Si la permission n'est pas accordée, on la demande
+            if (status.hasPermission) {
+                console.log("✅ Permission de localisation déjà accordée.");
+                getLocation();
+            } else {
+                // Demande la permission
                 permissions.requestPermission(
                     permissions.ACCESS_FINE_LOCATION,
-                    () => {
-                        console.log("Permission de localisation accordée !");
-                        getLocation(); // Récupère la localisation après avoir obtenu la permission
+                    (grantedStatus) => {
+                        if (grantedStatus.hasPermission) {
+                            console.log("✅ Permission de localisation accordée !");
+                            getLocation();
+                        } else {
+                            console.warn("❌ Permission refusée.");
+                            alert("📍 L'application a besoin de la localisation pour fonctionner.");
+                        }
                     },
                     () => {
-                        console.error("Permission de localisation refusée.");
-                        alert("L'application a besoin de la localisation pour fonctionner correctement.");
+                        console.error("❌ Erreur lors de la demande de permission.");
+                        alert("🚫 Impossible d'obtenir la localisation sans permission.");
                     }
                 );
-            } else {
-                console.log("Permission de localisation déjà accordée.");
-                getLocation(); // Si la permission est déjà accordée, on récupère la localisation
             }
-        }, (error) => {
-            console.error("Erreur lors de la vérification des permissions :", error);
-        });
+        }, (error) => console.error("❌ Erreur lors de la vérification des permissions :", error));
     } else {
         // Si Cordova n'est pas disponible, utilise l'API de géolocalisation standard
         getLocation();
@@ -378,16 +407,13 @@ function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Localisation réussie
                 userLocation = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 };
-                console.log("Localisation obtenue :", userLocation);
+                console.log("📍 Localisation obtenue :", userLocation);
             },
-            (error) => {
-                handleGeolocationError(error);
-            },
+            handleGeolocationError,
             {
                 enableHighAccuracy: true,
                 timeout: 10000,
@@ -395,7 +421,7 @@ function getLocation() {
             }
         );
     } else {
-        alert("La géolocalisation n'est pas supportée par votre appareil.");
+        alert("🚫 La géolocalisation n'est pas supportée par votre appareil.");
     }
 }
 
@@ -405,16 +431,16 @@ function handleGeolocationError(error) {
 
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            message = "L'accès à la localisation a été refusé.";
+            message = "📍 L'accès à la localisation a été refusé.";
             break;
         case error.POSITION_UNAVAILABLE:
-            message = "La localisation est indisponible.";
+            message = "⚠️ La localisation est indisponible.";
             break;
         case error.TIMEOUT:
-            message = "Le temps pour obtenir la localisation a expiré. Assurez-vous que votre GPS est activé.";
+            message = "⏳ Délai dépassé. Activez le GPS et réessayez.";
             break;
         default:
-            message = "Une erreur inconnue est survenue.";
+            message = "❌ Une erreur inconnue est survenue.";
             break;
     }
 

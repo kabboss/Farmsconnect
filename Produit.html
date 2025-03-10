@@ -81,21 +81,30 @@ window.onload = function() {
 
 
 <section class="categories">
-    <div class="category-list">
-        <button onclick="showCategory('poulet-local')">Poulet Local</button>
-        <button onclick="showCategory('poulet-chair')">Poulet de Chair</button>
-        <button onclick="showCategory('poulet-ameliore')">Poulet Amélioré</button>
-        <button onclick="showCategory('poule-pondeuse')">Poule Pondeuse</button>
-        <button onclick="showCategory('coq-local')">Coq Local</button>
-        <button onclick="showCategory('coq-local-ameliore')">Coq Local Amélioré</button>
-        <button onclick="showCategory('pintade-male')">Pintade Male</button>
-        <button onclick="showCategory('pintade-femelle')">Pintade Femelle</button>
-        <button onclick="showCategory('dindon')">Dindon</button>
-        <button onclick="showCategory('canard')">Canard</button>
-        <button onclick="showCategory('caille')">Caille</button>
-        <button onclick="showCategory('lapin')">Lapin</button>
+    <div class="dropdown-container">
+        <button onclick="toggleDropdown()">Faites votre choix</button>
+        <select id="categoryDropdown" onchange="showCategory(this.value)">
+            <option value="">-- Sélectionnez une catégorie --</option>
+            <option value="poulet-local">Poulet Local</option>
+            <option value="poulet-chair">Poulet de Chair</option>
+            <option value="poulet-ameliore">Poulet Amélioré</option>
+            <option value="poule-pondeuse">Poule Pondeuse</option>
+            <option value="coq-local">Coq Local</option>
+            <option value="coq-local-ameliore">Coq Local Amélioré</option>
+            <option value="pintade-male">Pintade Mâle</option>
+            <option value="pintade-femelle">Pintade Femelle</option>
+            <option value="dindon">Dindon</option>
+            <option value="canard">Canard</option>
+            <option value="caille">Caille</option>
+            <option value="lapin">Lapin</option>
+        </select>
     </div>
 </section>
+
+
+
+
+
 
 <button class="open-modal-button">Note Importante aux Acheteurs</button>
 
@@ -669,6 +678,21 @@ window.onload = function() {
 </section>
 
 
+<!-- Conteneur des produits -->
+<div class="product-container">
+    <div class="product poulet-local">🐔 Poulet Local</div>
+    <div class="product poulet-chair">🐔 Poulet de Chair</div>
+    <div class="product poulet-ameliore">🐔 Poulet Amélioré</div>
+    <div class="product poule-pondeuse">🥚 Poule Pondeuse</div>
+    <div class="product coq-local">🐓 Coq Local</div>
+    <div class="product coq-local-ameliore">🐓 Coq Local Amélioré</div>
+    <div class="product pintade-male">🦃 Pintade Mâle</div>
+    <div class="product pintade-femelle">🦃 Pintade Femelle</div>
+    <div class="product dindon">🦃 Dindon</div>
+    <div class="product canard">🦆 Canard</div>
+    <div class="product caille">🐦 Caille</div>
+    <div class="product lapin">🐰 Lapin</div>
+</div>
 
 
 
