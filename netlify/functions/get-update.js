@@ -25,7 +25,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({
                 versionCode: versionCode,  // Le code de version unique
                 downloadUrl: "https://drive.google.com/uc?export=download&id=12zATa4beMkU8AcavDwTYbWJP4JLg2kpH",
-                message: `📱 Mise à jour disponible: ${versionCode} 🔄\n📅 Publiée le : 22 janvier 2025.`,
+                message: `📱 Mise à jour disponible: ${versionCode} 🔄\n📅 Publiée le : 10 mars 2025.`,
             }),
         };
     }
