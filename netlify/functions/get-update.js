@@ -1,4 +1,6 @@
 exports.handler = async (event) => {
+    const versionCode = "v2.4.0"; // Le code de version unique
+
     // 1️⃣ Gérer les requêtes préflight (OPTIONS)
     if (event.httpMethod === 'OPTIONS') {
         return {
@@ -21,8 +23,9 @@ exports.handler = async (event) => {
                 "Access-Control-Allow-Origin": "*",  // Active CORS
             },
             body: JSON.stringify({
+                versionCode: versionCode,  // Le code de version unique
                 downloadUrl: "https://drive.google.com/uc?export=download&id=12zATa4beMkU8AcavDwTYbWJP4JLg2kpH",
-                message: `📱 Mise à jour disponible: V2.1.0 (Optimal) 🔄\n📅 Publiée le : 22 janvier 2025.`,
+                message: `📱 Mise à jour disponible: ${versionCode} 🔄\n📅 Publiée le : 22 janvier 2025.`,
             }),
         };
     }
