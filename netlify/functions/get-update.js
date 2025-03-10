@@ -1,5 +1,5 @@
 exports.handler = async (event) => {
-    const versionCode = "v2.4.0"; // Le code de version unique
+    const versionCode = "v2.5.0"; // Le code de version unique
 
     // 1️⃣ Gérer les requêtes préflight (OPTIONS)
     if (event.httpMethod === 'OPTIONS') {
