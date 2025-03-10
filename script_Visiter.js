@@ -41,3 +41,33 @@ window.addEventListener('click', function(event) {
 });
 
 
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Sélection de toutes les images des cartes
+    document.querySelectorAll(".animal-card img").forEach(img => {
+        img.addEventListener("click", () => {
+            openFullScreen(img.src);
+        });
+    });
+});
+
+// Fonction pour afficher une image en plein écran
+function openFullScreen(src) {
+    const fullscreenContainer = document.createElement("div");
+    fullscreenContainer.classList.add("fullscreen-img");
+
+    fullscreenContainer.innerHTML = `
+        <span class="close-fullscreen">&times;</span>
+        <img src="${src}" alt="Image en plein écran">
+    `;
+
+    document.body.appendChild(fullscreenContainer);
+
+    // Fermer l'image en plein écran au clic
+    fullscreenContainer.addEventListener("click", (e) => {
+        if (e.target.classList.contains("close-fullscreen") || e.target === fullscreenContainer) {
+            fullscreenContainer.remove();
+        }
+    });
+}

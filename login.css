@@ -67,6 +67,7 @@ body {
     text-transform: uppercase;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     letter-spacing: 2px;
+    text-align: center;
     animation: textAnimation 2.5s ease-out infinite alternate;
 }
 
@@ -363,8 +364,8 @@ nav ul li a:hover {
 .button-container {
     display: flex;
     justify-content: center;
-    gap: 20px;  /* Espacement entre les boutons */
-    margin-top: 50px;  /* Espacement depuis le haut */
+    gap: 60px;  /* Espacement entre les boutons */
+    margin-top: 60px;  /* Espacement depuis le haut */
 }
 
 /* Style général des boutons */
@@ -474,7 +475,7 @@ nav ul li a:hover {
     overflow-y: auto; /* Défilement vertical activé */
     background-color: rgba(0, 0, 0, 0.8); /* Fond plus sombre pour accentuer l'effet */
     backdrop-filter: blur(8px); /* Augmenter le flou pour un effet plus élégant */
-    padding: 20px 0; /* Espacement pour éviter que le contenu ne touche le haut ou le bas */
+    padding: 97px 0; /* Espacement pour éviter que le contenu ne touche le haut ou le bas */
     box-sizing: border-box; /* Inclure les marges et les bordures dans les dimensions */
     transition: all 0.3s ease; /* Ajout d'une transition fluide pour l'apparition */
 
@@ -684,14 +685,16 @@ nav ul li a:hover {
 @media (max-width: 768px) {
     /* Modale */
     .modal-content {
-        margin: 10px 5%;
-        padding: 30px;
+        margin: 10px;
+        padding: 7px;
         width: 100%;
+        height: 540px;
     }
 
     /* Boutons */
     .modal-content button {
-        font-size: 14px;
+        font-size: 20px;
+        text-align: center;
     }
 
     /* Champs de formulaire */
@@ -745,42 +748,57 @@ nav ul li a:hover {
 
 
 
-/* Conteneur pour centrer le bouton */
+/* Style du conteneur du bouton */
 .button-container1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto; /* Centre verticalement sur toute la hauteur de l'écran */
-    margin-top: 50px;
+    position: fixed; /* Position fixe pour qu'il reste visible */
+    top: 70px; /* Descend le bouton de 4 cm (40px) */
+    left: 0; /* Aligner sur le bord gauche */
+    width: 100%; /* Largeur à 100% pour couvrir toute la page */
+    z-index: 1001; /* S'assure qu'il est au-dessus du contenu */
+    margin-bottom: auto;
+    margin-top: 30px;
 }
 
 /* Style du bouton */
 .open-modal-button {
-    padding: 10px 20px; /* Augmenter la taille du bouton */
-    font-size: 12px; /* Texte plus grand */
-    font-weight: bold; /* Mettre en valeur le texte */
-    color: #fff; /* Couleur du texte */
-    background: linear-gradient(45deg, #6a11cb, #2575fc); /* Dégradé moderne */
+    width: 100%; /* Largeur du bouton à 100% */
+    padding: 15px;
+    background-color: #e74c3c; /* Rouge vif */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
     border: none;
-    border-radius: 50px; /* Forme ovale */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Ombre élégante */
     cursor: pointer;
-    transition: all 0.3s ease; /* Transition douce pour les interactions */
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    border-radius: 25px; /* Coins arrondis */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Effets au survol */
+/* Animation au survol */
 .open-modal-button:hover {
-    transform: scale(1.1); /* Légère augmentation de taille */
-    background: linear-gradient(45deg, #2575fc, #6a11cb); /* Inverse le dégradé */
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Accentue l'ombre */
+    background-color: #c0392b; /* Changement de couleur */
+    transform: scale(1.02); /* Légère augmentation de la taille */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Effets lors d'un clic */
+/* Animation au clic */
 .open-modal-button:active {
-    transform: scale(1.05); /* Réduction légère */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Réduction de l'ombre */
+    transform: scale(0.98); /* Légère réduction */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Animation d'apparition */
+@keyframes bounceIn {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Appliquer l'animation d'entrée */
+.open-modal-button {
+    animation: bounceIn 0.6s ease-out;
+}
 
 
 
@@ -1038,6 +1056,7 @@ h3 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre subtile */
     object-fit: cover;       /* Ajuste l'image pour qu'elle s'adapte parfaitement */
     animation: fadeIn 1s ease-in-out; /* Animation d'apparition */
+    margin-bottom: -60px;
 }
 
 /* Animation d'apparition */
@@ -1655,8 +1674,8 @@ button:hover {
 @media (max-width: 480px) {
     .container {
         padding: 10px;
-        margin: 10px auto;
-        max-width: 95%;
+        margin: 10px;
+        max-width: 100%;
     }
 
     .message {
@@ -1688,3 +1707,171 @@ button:hover {
     text-align: center;
     cursor: pointer;
 }
+
+
+
+
+
+
+
+/* ----- MODAL STYLING ----- */
+.modal-content3 {
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease-in-out;
+    position: relative;
+}
+
+.close-button1 {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/* ----- HEADER ----- */
+.modal-header h2 {
+    font-size: 24px;
+    color: #007bff;
+    font-weight: bold;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.tagline {
+    font-size: 16px;
+    color: #555;
+    margin-top: -10px;
+    animation: slideIn 1s ease-in-out;
+}
+
+/* ----- HERO SECTION ----- */
+.hero-section img {
+    max-width: 80%;
+    height: auto;
+    margin-bottom: 15px;
+    animation: zoomIn 1s ease-in-out;
+}
+
+/* ----- TEXT STYLING ----- */
+.intro-text {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* ----- HIGHLIGHT BOX ----- */
+.highlight-box {
+    background: rgba(255, 223, 186, 0.5);
+    padding: 15px;
+    border-left: 5px solid #ff9800;
+    font-style: italic;
+    margin-bottom: 20px;
+    animation: bounce 1s ease-in-out;
+}
+
+/* ----- FEATURES SECTION ----- */
+.features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.feature-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    animation: slideUp 1s ease-in-out;
+}
+
+.feature-card h3 {
+    color: #007bff;
+    font-size: 18px;
+}
+
+.feature-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.feature-card li {
+    font-size: 14px;
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+.feature-card li::before {
+    content: "✔️";
+    margin-right: 8px;
+    color: #28a745;
+}
+
+/* ----- CALL TO ACTION ----- */
+.cta-section {
+    margin-top: 20px;
+}
+
+.cta-button {
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    animation: pulse 1.5s infinite;
+}
+
+.cta-button:hover {
+    background: #0056b3;
+}
+
+/* ----- FINAL MESSAGE ----- */
+.final-message {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+    margin-top: 20px;
+    animation: bounce 1.5s infinite;
+}
+
+/* ----- ANIMATIONS ----- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ----- RESPONSIVE DESIGN ----- */
+@media (max-width: 768px) {
+    .modal-content3 { padding: 15px; }
+    .feature-card { text-align: center; }
+}
+

@@ -11,7 +11,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.3/lottie.min.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
 
-
 </head>
 <body>
 
@@ -44,7 +43,7 @@
     // Fonction pour vérifier la mise à jour
     async function checkForUpdate() {
       try {
-        const response = await fetch('https://farmsconnect.netlify.app/get-update'); // URL de l'API
+        const response = await fetch('https://farmsconnect.netlify.app/.netlify/functions/get-update'); // URL de l'API
   
         if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
   
@@ -101,6 +100,13 @@
     document.getElementById('startButton').addEventListener('click', function() {
     });
 </script>
+
+ <!-- Bouton -->
+ <div class="button-container1">
+    <button class="open-modal-button" onclick="openModal()">En savoir plus</button>
+</div>
+
+
 
 <div class="home-container">
     <img src="img/FarmsConnect.jpg" alt="Bienvenue sur FarmsConnect" class="home-image">
@@ -651,17 +657,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-
- <!-- Bouton -->
- <div class="button-container1">
-    <button class="open-modal-button" onclick="openModal()">En savoir plus sur FarmsConnect</button>
-</div>
-
 <div class="container">
     <p id="appMessage" class="message">Bienvenue sur FarmsConnect !</p>
     <button id="updateButton" class="update-button" style="display: none;">Télécharger la mise à jour</button>
     <p id="errorMessage" class="error" style="display: none;">Erreur lors de la récupération des données.</p>
 </div>
+
+<!--
 <p>Utilisateurs de FarmConnect : <span id="view-count">0</span></p>
 
 <script>
@@ -698,53 +700,76 @@ document.addEventListener("DOMContentLoaded", function() {
         getViewCount();     // Récupère et affiche le compteur actuel
     };
 </script>
-
+-->
 
 
 
 <!-- Fenêtre modale -->
-<div class="modal hidden" id="farmsConnectModal">
-    <div class="modal-content">
+<div class="modal hidden3" id="farmsConnectModal">
+    <div class="modal-content3">
         <span class="close-button1" onclick="closeModal()">×</span>
-        <h2>Bienvenue sur <strong>FarmsConnect</strong> 🐓🌍</h2>
-        <p>
-          <strong>La révolution numérique du marché avicole au Burkina Faso ! 🚀</strong>
-        </p>
-        <p>
-          Que vous soyez <strong>consommateur</strong> 🛒, <strong>éleveur</strong> 👩‍🌾, ou <strong>vendeur</strong> 🏪, 
-          <strong>FarmsConnect</strong> est <strong>LA solution innovante</strong> qui transforme le commerce des produits avicoles. 
-          Que vous possédiez <strong>2 poules</strong> 🐔 ou <strong>200 poules</strong> 🐔🐔🐔, que vous recherchiez de la volaille vivante ou prête à cuire, 
-          <strong>FarmsConnect</strong> vous connecte à un réseau <strong>fiable</strong>, <strong>transparent</strong>, et <strong>accessible en un clic</strong> 🖱️.
-        </p>
         
-        <h3>Pour les consommateurs 🛒</h3>
-        <ul>
-          <li><strong>Commande en ligne facile et rapide</strong> 💻 : Achetez vos produits avicoles depuis le confort de votre maison.</li>
-          <li><strong>Traçabilité garantie</strong> ✅ : Des produits certifiés, directement issus des éleveurs.</li>
-          <li><strong>Livraison sécurisée</strong> 🚚 : Recevez vos commandes en un temps record grâce à notre service logistique fiable.</li>
-        </ul>
+        <div class="modal-header">
+            <h2 class="fade-in"><strong>Bienvenue sur FarmsConnect</strong></h2>
+            <p class="tagline slide-in">La plateforme qui révolutionne le marché avicole au Burkina Faso ! 🌟</p>
+        </div>
         
-        <h3>Pour les éleveurs 👩‍🌾</h3>
-        <ul>
-          <li><strong>Accès direct au marché</strong> 🔗 : Vendez facilement vos produits sans intermédiaire.</li>
-          <li><strong>Fixez vos propres prix</strong> 💰 : Gardez un contrôle total sur vos revenus et optimisez vos profits.</li>
-          <li><strong>Outils de gestion et conseils pratiques</strong> 🛠️ : Améliorez votre production grâce à des recommandations adaptées.</li>
-        </ul>
-        
-        <h3>Pour les vendeurs 🏪</h3>
-        <ul>
-          <li><strong>Produits certifiés FarmsConnect</strong> 🥇 : Assurez-vous de la qualité et de la fiabilité de vos achats.</li>
-          <li><strong>Achat simplifié</strong> 🛍️ : Gagnez en efficacité dans la gestion de vos commandes et de vos stocks.</li>
-          <li><strong>Partenariats durables</strong> 🤝 : Collaborez avec un réseau de confiance pour développer votre activité.</li>
-        </ul>
-        
-        <p>
-          <strong>Rejoignez la révolution FarmsConnect</strong> 🌟 et découvrez comment nous transformons le secteur avicole au Burkina Faso. 
-          Ensemble, nous construisons un avenir plus connecté et prospère pour tous ! 🌱🐓
-        </p>
+        <div class="modal-body">
+            <div class="hero-section zoom-in">
+                <img src="img/FarmsConnect.jpg" alt="FarmsConnect Logo">
+            </div>
+
+            <p class="intro-text fade-in">
+                🌍 Que vous soyez <strong>consommateur</strong> 🛒, <strong>éleveur</strong> 👩‍🌾 ou <strong>vendeur</strong> 🏪, 
+                **FarmsConnect** est **LA plateforme de référence** pour **acheter et vendre** vos produits avicoles en toute simplicité.
+            </p>
+            
+            <div class="highlight-box bounce">
+                <p>🐔 **Que vous possédiez 2 ou 200 poules**, ou que vous recherchiez de la volaille vivante ou prête à cuire,  
+                **FarmsConnect vous connecte** à un réseau fiable, transparent et accessible en un clic 🖱️.</p>
+            </div>
+
+            <section class="features">
+                <div class="feature-card slide-up">
+                    <h3>🛒 Pour les consommateurs</h3>
+                    <ul>
+                        <li><strong>Commande simplifiée</strong> 💻 – Achetez en quelques clics.</li>
+                        <li><strong>Qualité et traçabilité</strong> ✅ – Produits certifiés et contrôlés.</li>
+                        <li><strong>Livraison rapide & sécurisée</strong> 🚚 – Recevez chez vous sans stress.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card slide-up">
+                    <h3>👩‍🌾 Pour les éleveurs</h3>
+                    <ul>
+                        <li><strong>Accès direct au marché</strong> 🔗 – Vendez sans intermédiaire.</li>
+                        <li><strong>Fixez vos propres prix</strong> 💰 – Maximisez vos revenus.</li>
+                        <li><strong>Outils de gestion intelligents</strong> 🛠️ – Optimisez votre production.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card slide-up">
+                    <h3>🏪 Pour les vendeurs</h3>
+                    <ul>
+                        <li><strong>Produits certifiés FarmsConnect</strong> 🥇 – Fiabilité garantie.</li>
+                        <li><strong>Achat simplifié</strong> 🛍️ – Stocks et gestion optimisés.</li>
+                        <li><strong>Réseau et partenariats solides</strong> 🤝 – Développement durable assuré.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <p class="final-message bounce">
+                🌟 <strong>Rejoignez la révolution FarmsConnect</strong> et transformons ensemble le secteur avicole au Burkina Faso ! 🚀🐓
+            </p>
+
+            <div class="cta-section">
+                <button class="cta-button pulse">📲 Rejoindre FarmsConnect</button>
+            </div>
+        </div>
     </div>
 </div>
 
+    
   
   <div class="container">
     <p id="appMessage" class="message"></p>

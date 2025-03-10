@@ -837,3 +837,157 @@ form button:hover {
     color: #f44336; /* Rouge clair pour l'alerte */
     margin-top: 5px;
 }
+
+
+
+
+
+
+
+
+
+
+/* Style général de la fenêtre modale */
+.modal {
+    display: none; /* Masqué par défaut */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px); /* Effet de flou du fond */
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Contenu de la modale */
+.modal-content4 {
+    position: relative;
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%; /* Limite la hauteur pour permettre le défilement */
+    overflow-y: auto; /* Permet de scroller verticalement si nécessaire */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50px);
+    animation: slideUp 0.5s ease-out;
+    font-family: 'Arial', sans-serif;
+}
+
+/* En-tête */
+.modal-header h2 {
+    font-size: 2rem;
+    color: #2c3e50;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Corps de la modale */
+.modal-body {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #34495e;
+    margin-bottom: 20px;
+}
+
+/* Liste ordonnée */
+ol {
+    margin-left: 20px;
+}
+
+li {
+    margin-bottom: 15px;
+}
+
+li strong {
+    color: #e74c3c;
+}
+
+/* Signature */
+.signature {
+    font-style: italic;
+    text-align: right;
+    margin-top: 30px;
+    color: #7f8c8d;
+}
+
+/* Bouton de fermeture (nouveau style visible) */
+.close-button4 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: white;
+    background-color: #e74c3c; /* Bouton rouge vif */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Effet au survol */
+.close-button4:hover {
+    background-color: #c0392b; /* Changement de couleur au survol */
+}
+
+/* Animation de la fenêtre modale */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Style pour les notifications importantes */
+p {
+    margin-bottom: 20px;
+}
+
+p strong {
+    color: #e67e22;
+}
+
+/* Adaptation mobile */
+@media (max-width: 768px) {
+    .modal-content4 {
+        width: 90%;
+        padding: 20px;
+        max-height: 90%; /* Augmente la hauteur pour un meilleur ajustement sur les petits écrans */
+    }
+
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .tagline {
+        font-size: 1rem;
+    }
+
+    ol {
+        padding-left: 15px;
+    }
+
+    .close-button4 {
+        top: 5px;
+        right: 5px;
+        font-size: 1.2rem;
+        padding: 8px 16px;
+    }
+}

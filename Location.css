@@ -1,169 +1,213 @@
+/* Importation de la police futuriste */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: auto;
-  overflow-y: auto; /* Permet le défilement */
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: #0a0a0a;
+    color: white;
+    text-align: center;
+    overflow-x: hidden;
 }
 
-header {
-  position: absolute;
-  top: 20px; /* Ajusté pour descendre l'image */
-  text-align: center;
-  width: 100%;
-  animation: fadeInDown 1s ease;
+/* Arrière-plan animé */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(20, 20, 20, 0.8), #000);
+    z-index: -1;
 }
 
-header img {
-  width: 120px;
+/* En-tête */
+.header {
+    padding: 10px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Logo */
+/* Logo avec animation de zoom */
+.logo {
+  width: 120px; /* Agrandir le logo */
   border-radius: 50%;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: zoomLogo 2s ease-in-out infinite;
 }
 
-.welcome-message {
-  max-width: 800px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 80px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  animation: fadeInUp 1s ease;
-  margin-top: 50px; /* Marge supplémentaire pour les petits écrans */
+@keyframes zoomLogo {
+  0% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.1); /* Zoom léger */
+  }
+  100% {
+      transform: scale(1);
+  }
 }
 
-h1 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-  color: #ffd700;
+/* Section héro */
+.hero {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    background: url('../img/background.jpg') center/cover;
+    padding: 10px;
 }
 
-p {
-  font-size: 1.2em;
-  line-height: 1.6;
-  margin-bottom: 20px;
+.hero h1 {
+    font-size: 2rem;
+    color: #00ffcc;
+    text-shadow: 0 0 15px #00ffcc;
+    animation: glow 2s infinite alternate;
 }
 
-ul {
-  text-align: left;
-  margin: 20px auto;
-  padding: 0;
-  list-style: none;
+@keyframes glow {
+    from {
+        text-shadow: 0 0 15px #00ffcc;
+    }
+    to {
+        text-shadow: 0 0 30px #00ffff;
+    }
 }
 
-ul li {
-  margin: 10px 0;
-  font-size: 1em;
+.hero p {
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 10px;
 }
 
-ul li i {
-  color: #ffd700;
-  margin-right: 10px;
+/* Bouton futuriste */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(45deg, #00ffcc, #0077ff);
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 0 10px #00ffcc;
+    transition: all 0.3s ease;
+    margin-top: 15px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 30px;
-  height: 60px;
+/* Zoom-in animation for buttons */
+.zoomIn {
+    animation: zoomIn 0.5s ease-out;
 }
 
-button {
-  background: #2bff00;
-  color: #1e3c72;
-  border: none;
-  padding: 15px 30px;
-  font-size: 1.5em;
-  font-weight: bold;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
-button:hover {
-  background: #fff;
-  color: #1e3c72;
-  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ffff;
 }
 
-@keyframes fadeInDown {
-  from {
+/* Section fonctionnalités */
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 30px 10px;
+}
+
+.feature {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 300px;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+    transition: transform 0.3s ease-in-out;
+    margin-bottom: 20px;
     opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    animation: fadeInUp 1s ease forwards;
 }
 
 @keyframes fadeInUp {
-  from {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* Section Appel à l'Action */
+.call-to-action {
+    padding: 30px 15px;
+    border-radius: 15px;
+    margin: 0px;
+    width: 90%;
+}
+
+.call-to-action h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.call-to-action p {
+    font-size: 1rem;
     opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    animation: fadeInUp 1.5s ease forwards;
 }
 
-/* Responsiveness pour petits écrans */
-@media screen and (max-width: 768px) {
-  body {
-    padding: 20px;
-  }
-
-  .welcome-message {
-    padding: 20px;
-    margin-top: 50px;
-  }
-
-  h1 {
-    font-size: 2em;
-  }
-
-  p {
-    font-size: 1em;
-  }
-
-  button {
-    padding: 12px 24px;
-    font-size: 1em;
-  }
-
-  header img {
-    width: 100px;
-  }
+.call-to-action .btn {
+    margin-top: -30px;
 }
 
-@media screen and (max-width: 480px) {
-  .welcome-message {
-    padding: 15px;
-    margin-top: 30px;
-  }
+/* Responsive */
+@media (max-width: 480px) {
+    .hero {
+        height: 205px;
+        padding: 8px 4px;
+    }
 
-  h1 {
-    font-size: 1.8em;
-  }
+    .hero h1 {
+        font-size: 1.8rem;
+    }
 
-  p {
-    font-size: 0.9em;
-  }
+    .btn {
+        font-size: 1rem;
+        padding: 10px 25px;
+    }
 
-  button {
-    padding: 10px 20px;
-    font-size: 0.9em;
-  }
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
 
-  header img {
-    width: 80px;
-  }
+    .feature {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .call-to-action {
+        width: 95%;
+        padding: 25px 10px;
+    }
 }

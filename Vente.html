@@ -103,10 +103,11 @@
 
     <button type="button" class="open-modal-button">Note Importante aux Vendeurs</button>
 
-            <!-- Fenêtre modale -->
-<div id="modal" class="modal hidden">
+<!-- Fenêtre modale -->
+<!-- Fenêtre modale -->
+<div id="modal" class="modal hidden4">
     <div class="modal-content">
-        <span class="close-button">&times;</span>
+        <button class="close-button" onclick="closeModal()">Fermer</button> <!-- Nouveau bouton de fermeture -->
         <h2>Note Importante aux Vendeurs</h2>
         <p><strong>Chers vendeurs,</strong></p>
         <p>
@@ -142,7 +143,6 @@
             Cordialement,<br>
             <em>L’équipe FarmsConnect </em>
         </p>    
-    
     </div>
 </div>
     
@@ -230,7 +230,7 @@
     
                 // Afficher le message de succès avec un lien
                 const successMessage = 'Annonce envoyée avec succès! 😀 ';
-                const linkMessage = '<a href="Visiteur.html" class="alert-link">Voir mon annonce</a>';
+                const linkMessage = '<a href="https://farmsconnect.netlify.app/visiteur" class="alert-link">Voir mon annonce</a>';
                 showAlert(successMessage, linkMessage);
     
             } catch (error) {

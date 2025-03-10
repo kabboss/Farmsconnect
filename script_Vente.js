@@ -224,7 +224,7 @@ function sendData(animal) {
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    const compressedImage = canvas.toDataURL('image/jpeg', 0.7);
+                    const compressedImage = canvas.toDataURL('image/jpeg', 0.6);
                     resolve(compressedImage);
                 };
                 img.onerror = reject;
