@@ -6,7 +6,7 @@ exports.handler = async (event) => {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Access-Control-Allow-Headers': '*', // Changer ici pour * si Cordova bloque
             },
             body: '',
         };
@@ -20,11 +20,11 @@ exports.handler = async (event) => {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Allow-Headers": "*", // Forcer l'acceptation des requêtes Cordova
             },
             body: JSON.stringify({
                 downloadUrl: "https://drive.google.com/uc?export=download&id=1hB4kppnFgFTfZ22bLt56ou1Pu2RlkTOj",
-                message: "📱 Mise à jour 🔄\n📅 Publiée le : 11 mars 2025.",
+                message: "📱 Mise à jour disponible ! 🔄\n📅 Publiée le : 11 mars 2025.",
             }),
         };
     }
