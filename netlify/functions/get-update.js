@@ -1,13 +1,11 @@
 exports.handler = async (event) => {
-    const versionCode = "v2.5.0"; // Le code de version unique
-
     // 1️⃣ Gérer les requêtes préflight (OPTIONS)
     if (event.httpMethod === 'OPTIONS') {
         return {
-            statusCode: 204, // No Content
+            statusCode: 204,
             headers: {
-                'Access-Control-Allow-Origin': '*',  // Permet toutes les origines
-                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // Méthodes autorisées
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
             },
             body: '',
@@ -20,12 +18,11 @@ exports.handler = async (event) => {
             statusCode: 200,
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",  // Active CORS
+                "Access-Control-Allow-Origin": "*",
             },
             body: JSON.stringify({
-                versionCode: versionCode,  // Le code de version unique
                 downloadUrl: "https://drive.google.com/file/d/1hB4kppnFgFTfZ22bLt56ou1Pu2RlkTOj/view?usp=sharing",
-                message: `📱 Mise à jour disponible: ${versionCode} 🔄\n📅 Publiée le : 10 mars 2025.`,
+                message: "📱 Mise à jour! 🔄\n📅 Publiée le : 10 mars 2025.",
             }),
         };
     }
