@@ -1,41 +1,20 @@
-exports.handler = async (event) => {
-    // Gestion des requêtes OPTIONS (CORS)
-    if (event.httpMethod === 'OPTIONS') {
-        return {
-            statusCode: 204,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Headers': '*', // Changer ici pour * si Cordova bloque
-            },
-            body: '',
-        };
-    }
-
-    // Gestion des requêtes GET
-    if (event.httpMethod === 'GET') {
+exports.handler = async () => {
+    try {
         return {
             statusCode: 200,
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Allow-Headers": "*", // Forcer l'acceptation des requêtes Cordova
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                downloadUrl: "https://drive.google.com/uc?export=download&id=1hB4kppnFgFTfZ22bLt56ou1Pu2RlkTOj",
-                message: "📱 Mise à jour disponible ! 🔄\n📅 Publiée le : 11 mars 2025.",
+                downloadUrl: "https://drive.google.com/uc?export=download&id=12zATa4beMkU8AcavDwTYbWJP4JLg2kpH",
+                message: `📱 Mise à jour disponible: V2.1.0 (Optimal) 🔄\n
+                          📅 Publiée le : 22 janvier 2025.`,
             }),
         };
+    } catch (err) {
+        console.error("❌ Erreur lors de l'envoi du lien de mise à jour :", err);
+        return {
+            statusCode: 500,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: "Erreur serveur" }),
+        };
     }
-
-    // Gestion des requêtes non trouvées
-    return {
-        statusCode: 404,
-        headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ message: "❌ Endpoint non trouvé" }),
-    };
 };
