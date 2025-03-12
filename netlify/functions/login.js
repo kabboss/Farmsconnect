@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../../models/User');  // Adapte le chemin de ton modèle User
+const CollecteDonnees = require('../../models/collecteDonnees'); // Assure-toi d'importer correctement le modèle
 
 // Se connecter à MongoDB
 const mongoURI = 'mongodb+srv://kabboss:ka23bo23re23@cluster0.uy2xz.mongodb.net/FarmsConnect?retryWrites=true&w=majority';
@@ -9,133 +7,93 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connecté à MongoDB...'))
     .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
-exports.handler = async (event, context) => {
-  // Gérer les requêtes préflight CORS (OPTIONS)
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 204, // No Content
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      },
-      body: '',
-    };
-  }
+// Ajouter les en-têtes CORS
+const headers = {
+  "Access-Control-Allow-Origin": "*", // Autoriser toutes les origines, vous pouvez spécifier un domaine particulier si nécessaire
+  "Access-Control-Allow-Methods": "OPTIONS, POST", // Méthodes autorisées
+  "Access-Control-Allow-Headers": "Content-Type, Authorization", // En-têtes autorisés
+};
 
-  // Vérification de la méthode HTTP (accepter uniquement POST)
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,  // Method Not Allowed
-      body: JSON.stringify({ message: 'Méthode non autorisée. Utilisez POST.' }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      }
-    };
-  }
+// Fonction handler pour la requête
+exports.handler = async function(event, context) {
 
-  let data = {};
-
-  // Sécuriser le parsing JSON
-  try {
-    if (event.body) {
-      data = JSON.parse(event.body);
-    } else {
-      throw new Error('Le corps de la requête est vide');
-    }
-  } catch (parseError) {
-    return {
-      statusCode: 400,  // Bad Request
-      body: JSON.stringify({ message: 'Données JSON invalides. Assurez-vous d\'envoyer un JSON valide.' }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      }
-    };
-  }
-
-  const { username, email, contact, password } = data;
-
-  // Validation des données reçues
-  if (!username || !email || !contact || !password) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: "Tous les champs sont requis." }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      }
-    };
-  }
-
-  try {
-    // Recherche de l'utilisateur par son nom d'utilisateur
-    const user = await User.findOne({ username });
-    if (!user || user.email !== email || user.contact !== contact) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Informations incorrectes.' }),
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        }
-      };
-    }
-
-    // Vérification du mot de passe
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Mot de passe incorrect.' }),
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        }
-      };
-    }
-
-    // Création du token JWT
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET || 'ka23bo23re23',
-      { expiresIn: '1h' }
-    );
-
-    // Réponse avec le token et les infos utilisateur
+  // Gérer les requêtes OPTIONS (prévol CORS)
+  if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        username: user.username,
-        email: user.email,
-        contact: user.contact,
-        token,
-        message: 'Connexion réussie !',
-      }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Content-Type': 'application/json',
-      }
+      headers, // Ajouter les en-têtes CORS ici aussi
+      body: JSON.stringify({ message: "Options request accepted" }),
     };
+  }
 
-  } catch (error) {
-    console.error('Erreur lors de la connexion :', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: 'Erreur serveur : ' + error.message }),
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  // Gérer les requêtes POST
+  if (event.httpMethod === "POST") {
+    try {
+      // Parser les données envoyées dans la requête
+      const requestData = JSON.parse(event.body);
+
+      // Se connecter à MongoDB si ce n'est pas déjà fait
+      if (mongoose.connection.readyState !== 1) {
+        await mongoose.connect(process.env.MONGO_URI, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
       }
+
+      // Créer une nouvelle entrée dans la collection
+      const collecte = new CollecteDonnees({
+        Nom_prenom: requestData.Nom_prenom,
+        Numero_telephone: requestData.Numero_telephone,
+        Numero_telephone2: requestData.Numero_telephone2,
+        age: requestData.age,
+        region: requestData.region,
+        Localite: requestData.Localite,
+        sexe: requestData.sexe,
+        education: requestData.education,
+        type_elevage: requestData.type_elevage,
+        nombre_animaux: requestData.nombre_animaux,
+        revenus_elevage: requestData.revenus_elevage,
+        mode_alimentation: requestData.mode_alimentation,
+        acces_eau: requestData.acces_eau,
+        defis: requestData.defis,
+        autres_defis: requestData.autres_defis,
+        dechets_animaux: requestData.dechets_animaux,
+        utilisation_technologie: requestData.utilisation_technologie,
+        technologies_utilisees: requestData.technologies_utilisees,
+        acces_formation: requestData.acces_formation,
+        type_formation: requestData.type_formation,
+        financement: requestData.financement,
+        besoin_financier: requestData.besoin_financier,
+        plan_futur: requestData.plan_futur
+      });
+
+      // Sauvegarder les données dans la base de données
+      await collecte.save();
+
+      // Retourner une réponse avec succès
+      return {
+        statusCode: 200,
+        headers, // Ajouter les en-têtes CORS ici aussi
+        body: JSON.stringify({
+          message: "Données enregistrées avec succès!",
+          data: collecte,
+        })
+      };
+
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement des données : ", error);
+
+      return {
+        statusCode: 500,
+        headers, // Ajouter les en-têtes CORS ici aussi
+        body: JSON.stringify({ message: "Une erreur est survenue lors du traitement des données." })
+      };
+    }
+  } else {
+    return {
+      statusCode: 405,
+      headers, // Ajouter les en-têtes CORS ici aussi
+      body: JSON.stringify({ message: "Méthode HTTP non autorisée" })
     };
   }
 };
