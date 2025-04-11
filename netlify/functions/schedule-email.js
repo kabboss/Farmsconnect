@@ -1,45 +1,49 @@
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule'); // Pour la planification des emails
+
+// Configuration du transporteur email
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'kaboreabwa2020@gmail.com',
-        pass: 'swbo vejr klic otpu', // Utilisation de variable d'environnement pour sécuriser le mot de passe
+        pass: 'swbo vejr klic otpu', // Utilise idéalement une variable d'environnement
     }
 });
 
+// En-têtes CORS communs
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 exports.handler = async (event, context) => {
-    // Gérer les requêtes préflight CORS (OPTIONS)
+    // Réponse préliminaire pour les requêtes OPTIONS (préflight)
     if (event.httpMethod === 'OPTIONS') {
         return {
             statusCode: 204,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            },
+            headers: corsHeaders,
             body: '',
         };
     }
 
-    // Vérifier que la requête est bien un POST
+    // Refus des autres méthodes que POST
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
-            body: JSON.stringify({ message: 'Méthode non autorisée' })
+            headers: corsHeaders,
+            body: JSON.stringify({ message: 'Méthode non autorisée' }),
         };
     }
 
-    // Récupérer les données envoyées par le frontend
     try {
         const { purchaseDetails, delay } = JSON.parse(event.body);
 
-        console.log("Données reçues :", purchaseDetails, "Délai reçu :", delay);
-
-        // Vérification des entrées
+        // Validation des données reçues
         if (!purchaseDetails || !purchaseDetails.email || !purchaseDetails.username) {
             return {
                 statusCode: 400,
+                headers: corsHeaders,
                 body: JSON.stringify({ success: false, message: "Informations manquantes" })
             };
         }
@@ -47,12 +51,14 @@ exports.handler = async (event, context) => {
         if (typeof delay !== 'number' || delay < 0) {
             return {
                 statusCode: 400,
+                headers: corsHeaders,
                 body: JSON.stringify({ success: false, message: "Délai invalide" })
             };
         }
 
+        // Configuration de l'email
         const mailOptionsClient = {
-            from: process.env.EMAIL_USER,
+            from: 'kaboreabwa2020@gmail.com',
             to: purchaseDetails.email,
             subject: '✅ Merci pour votre achat sur FarmsConnect !',
             text: `👋 Bonjour ${purchaseDetails.username},
@@ -77,19 +83,19 @@ L'équipe FarmsConnect`
         };
 
         // Planifier l'envoi de l'email après le délai spécifié
-        console.log(`Email planifié pour ${purchaseDetails.email} dans ${delay} minutes.`);
-        
         setTimeout(async () => {
             try {
                 await transporter.sendMail(mailOptionsClient);
-                console.log('✅ Email envoyé avec succès au client !');
+                console.log(`✅ Email envoyé à ${purchaseDetails.email}`);
             } catch (error) {
                 console.error('❌ Erreur lors de l\'envoi de l\'email :', error);
             }
-        }, delay * 60000); // Conversion minutes → millisecondes
+        }, delay * 60000); // Délai en minutes → millisecondes
 
+        // Réponse au frontend
         return {
             statusCode: 200,
+            headers: corsHeaders,
             body: JSON.stringify({
                 success: true,
                 message: `Email planifié pour ${purchaseDetails.email} dans ${delay} minutes.`
@@ -100,6 +106,7 @@ L'équipe FarmsConnect`
         console.error('❌ Erreur lors du traitement de la requête :', error);
         return {
             statusCode: 500,
+            headers: corsHeaders,
             body: JSON.stringify({ success: false, message: "Erreur interne du serveur" })
         };
     }
