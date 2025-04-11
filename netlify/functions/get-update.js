@@ -21,7 +21,7 @@ exports.handler = async (event) => {
                 "Access-Control-Allow-Headers": "Content-Type"
             },
             body: JSON.stringify({
-                downloadUrl: "https://drive.google.com/file/d/199FlZziHhrBWQoc__9le2aplArVfaILU/view?usp=sharing",
+                downloadUrl:  "https://drive.google.com/uc?export=download&id=199FlZziHhrBWQoc__9le2aplArVfaILU",
                 message: `📲 Nouvelle mise à jour disponible 🗓️ Publiée le : 11 avril 2025 ⚠️ Si vous avez installé l'application avant cette date, veuillez la mettre à jour pour bénéficier des dernières améliorations.🔗 Cliquez sur le lien ci-dessous pour télécharger la nouvelle version.`,
             }),
         };
