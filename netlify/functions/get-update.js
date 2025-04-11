@@ -21,8 +21,8 @@ exports.handler = async (event) => {
                 "Access-Control-Allow-Headers": "Content-Type"
             },
             body: JSON.stringify({
-                downloadUrl: "https://drive.google.com/file/d/1j6B_w-IBnKxK10mzl1KtzDhMBdYolbik/view?usp=sharing",
-                message: `📱 Mise à jour 🔄\n Publiée le : 02 Avril 2025📅 .`,
+                downloadUrl: "https://drive.google.com/file/d/199FlZziHhrBWQoc__9le2aplArVfaILU/view?usp=sharing",
+                message: `📲 Nouvelle mise à jour disponible !<br><br>🗓️ Publiée le : <strong style="color:rgb(7, 8, 8);">11 avril 2025</strong><br><br>⚠️ Si vous avez installé l'application avant cette date, veuillez la mettre à jour pour bénéficier des dernières améliorations.<br><br>🔗 Cliquez sur le lien ci-dessous pour télécharger la nouvelle version.`,
             }),
         };
     } catch (err) {
